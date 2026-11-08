@@ -9,6 +9,7 @@
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
@@ -24,7 +25,7 @@
               navy: '#12274D',
               gold: '#DEC031',
               goldHover: '#CBB025',
-              sky: '#EBF1FA'
+              sky: '#E6EEF8'
             }
           }
         }
@@ -38,16 +39,16 @@
 <body
   x-data="hamApp()"
   :class="{ 'overflow-hidden': menuOpen || donateOpen || cartOpen }"
-  class="bg-[#F8FAFC] text-slate-900 font-sans antialiased selection:bg-ham-gold selection:text-slate-900"
+  class="bg-[#F4F7FB] text-slate-900 font-sans antialiased selection:bg-ham-gold selection:text-slate-900"
 >
 
-  <!-- TOP NAVIGATION BAR (Matches Reference + Desktop Nav) -->
-  <header class="sticky top-0 z-40 bg-ham-blue text-white shadow-md border-b border-white/10">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+  <!-- TOP NAVIGATION BAR (Spacious layout for both EN and UA, with Language Dropdown) -->
+  <header class="sticky top-0 z-40 bg-ham-blue text-white shadow-lg border-b-2 border-ham-gold/60">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
       
       <!-- Brand Logo (Ukrainian + British Bridge Emblem) -->
-      <a href="#" class="flex items-center gap-3 group focus:outline-none">
-        <div class="flex items-center shadow-sm rounded overflow-hidden border border-white/20">
+      <a href="#" class="flex items-center gap-3 group focus:outline-none shrink-0">
+        <div class="flex items-center shadow-sm rounded overflow-hidden border border-white/25 shrink-0">
           <!-- UA Half -->
           <div class="w-6 h-8 flex flex-col">
             <div class="h-1/2 bg-[#0057B7]"></div>
@@ -66,60 +67,107 @@
           </div>
         </div>
         <div class="leading-tight">
-          <span class="block font-bold tracking-tight text-base sm:text-lg text-white group-hover:text-ham-gold transition">Ukrainian HAM</span>
-          <span class="block text-xs text-blue-100 font-light tracking-wider uppercase" x-text="t('cambridgeSub')">Heritage, Art & Music • Cambridge</span>
+          <span class="block font-bold tracking-tight text-base sm:text-lg text-white group-hover:text-ham-gold transition whitespace-nowrap">Ukrainian HAM</span>
+          <span class="block text-[11px] text-blue-100 font-normal tracking-wider uppercase whitespace-nowrap" x-text="t('cambridgeSub')">Heritage, Art & Music • Cambridge</span>
         </div>
       </a>
 
-      <!-- Desktop Navigation Links -->
-      <nav class="hidden lg:flex items-center gap-7 text-sm font-medium text-blue-50">
-        <a href="#mission" class="hover:text-ham-gold transition" x-text="t('navMission')">Our Mission</a>
-        <a href="#projects" class="hover:text-ham-gold transition" x-text="t('navProjects')">Projects</a>
-        <a href="#events" class="hover:text-ham-gold transition" x-text="t('navEvents')">Events</a>
-        <a href="#news" class="hover:text-ham-gold transition" x-text="t('navNews')">News</a>
-        <a href="#policies" class="hover:text-ham-gold transition" x-text="t('navPolicies')">Policies</a>
-        <a href="#contact" class="hover:text-ham-gold transition" x-text="t('navContact')">Contact</a>
+      <!-- Desktop Navigation Links (No wrapping, generous spacing, subtle pill hover) -->
+      <nav class="hidden xl:flex items-center gap-1.5 text-sm font-medium text-blue-50 shrink-0">
+        <a href="#mission" class="px-3 py-2 rounded-lg hover:bg-white/10 hover:text-ham-gold transition whitespace-nowrap" x-text="t('navMission')">Our Mission</a>
+        <span class="text-white/20">•</span>
+        <a href="#projects" class="px-3 py-2 rounded-lg hover:bg-white/10 hover:text-ham-gold transition whitespace-nowrap" x-text="t('navProjects')">Projects</a>
+        <span class="text-white/20">•</span>
+        <a href="#events" class="px-3 py-2 rounded-lg hover:bg-white/10 hover:text-ham-gold transition whitespace-nowrap" x-text="t('navEvents')">Events</a>
+        <span class="text-white/20">•</span>
+        <a href="#news" class="px-3 py-2 rounded-lg hover:bg-white/10 hover:text-ham-gold transition whitespace-nowrap" x-text="t('navNews')">News</a>
+        <span class="text-white/20">•</span>
+        <a href="#policies" class="px-3 py-2 rounded-lg hover:bg-white/10 hover:text-ham-gold transition whitespace-nowrap" x-text="t('navPolicies')">Policies</a>
+        <span class="text-white/20">•</span>
+        <a href="#contact" class="px-3 py-2 rounded-lg hover:bg-white/10 hover:text-ham-gold transition whitespace-nowrap" x-text="t('navContact')">Contact</a>
       </nav>
 
-      <!-- Right Action Controls: Language, Cart, Donate, Mobile Hamburger -->
-      <div class="flex items-center gap-3 sm:gap-4">
-        <!-- Language Toggle -->
-        <button
-          @click="toggleLang()"
-          class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-xs font-semibold tracking-wide transition"
-          title="Switch Language (EN / UA)"
-        >
-          <svg class="w-4 h-4 text-ham-gold" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
-          </svg>
-          <span x-text="lang === 'en' ? 'English' : 'Українська'"></span>
-        </button>
+      <!-- Right Action Controls: Language Dropdown, Cart, Donate, Mobile Hamburger -->
+      <div class="flex items-center gap-2.5 sm:gap-3.5 shrink-0">
+        
+        <!-- Interactive Language Dropdown (Desktop & Tablet) -->
+        <div class="relative" @click.outside="langDropdownOpen = false">
+          <button
+            @click="langDropdownOpen = !langDropdownOpen"
+            class="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-white/15 hover:bg-white/25 border border-white/25 text-xs sm:text-sm font-semibold tracking-wide transition whitespace-nowrap shadow-sm"
+            aria-label="Select Language"
+          >
+            <svg class="w-4 h-4 text-ham-gold shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"></path>
+            </svg>
+            <span x-text="lang === 'en' ? 'EN • English' : 'UA • Українська'"></span>
+            <svg class="w-3.5 h-3.5 text-ham-gold transition-transform duration-200" :class="langDropdownOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
 
-        <!-- Ticket Cart Button (Livewire TicketCart equivalent) -->
+          <!-- Dropdown List -->
+          <div
+            x-show="langDropdownOpen"
+            x-cloak
+            x-transition.origin.top.right
+            class="absolute right-0 mt-2 w-48 rounded-2xl bg-white text-slate-900 shadow-2xl border border-slate-200 py-2 z-50 overflow-hidden"
+          >
+            <div class="px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100">
+              Select Language / Мова
+            </div>
+            <button
+              @click="setLang('en'); langDropdownOpen = false"
+              class="w-full px-4 py-2.5 text-left text-sm flex items-center justify-between hover:bg-ham-sky/60 transition"
+              :class="lang === 'en' ? 'font-bold text-ham-blue bg-ham-sky/30' : 'text-slate-700'"
+            >
+              <span class="flex items-center gap-2.5">
+                <span class="text-base">🇬🇧</span>
+                <span>English (UK)</span>
+              </span>
+              <span x-show="lang === 'en'" class="text-ham-blue font-bold">✓</span>
+            </button>
+            <button
+              @click="setLang('uk'); langDropdownOpen = false"
+              class="w-full px-4 py-2.5 text-left text-sm flex items-center justify-between hover:bg-ham-sky/60 transition"
+              :class="lang === 'uk' ? 'font-bold text-ham-blue bg-ham-sky/30' : 'text-slate-700'"
+            >
+              <span class="flex items-center gap-2.5">
+                <span class="text-base">🇺🇦</span>
+                <span>Українська (UA)</span>
+              </span>
+              <span x-show="lang === 'uk'" class="text-ham-blue font-bold">✓</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Ticket Cart Button -->
         <button
           @click="cartOpen = true"
-          class="relative inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg hover:bg-white/10 transition"
+          class="relative inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg hover:bg-white/10 transition shrink-0"
           aria-label="Event Tickets Cart"
         >
           <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
             <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
           </svg>
-          <span class="text-base font-medium" x-text="cartTotalQty()">0</span>
+          <span class="text-base font-semibold" x-text="cartTotalQty()">0</span>
         </button>
 
         <!-- Donate Pill Button -->
         <button
           @click="donateOpen = true"
-          class="hidden sm:inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-ham-gold hover:bg-ham-goldHover text-slate-900 font-semibold text-sm shadow-sm transition transform active:scale-95"
+          class="hidden sm:inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-ham-gold hover:bg-ham-goldHover text-slate-900 font-bold text-sm shadow-sm transition transform active:scale-95 whitespace-nowrap shrink-0"
           x-text="t('donateBtn')"
         >
           Donate
         </button>
 
-        <!-- Full-screen Overlay Menu Trigger (Mobile + Reference Drawer) -->
+        <!-- Full-screen Overlay Menu Trigger -->
         <button
           @click="menuOpen = true"
-          class="inline-flex items-center justify-center p-2 rounded-lg hover:bg-white/10 transition focus:outline-none"
+          class="inline-flex items-center justify-center p-2 rounded-lg bg-white/10 hover:bg-white/20 transition focus:outline-none shrink-0"
           aria-label="Open Menu"
         >
           <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -130,15 +178,15 @@
     </div>
   </header>
 
-  <!-- FULL-SCREEN MOBILE / OVERLAY NAVIGATION DRAWER (Directly inspired by reference screenshot, with improved contrast blur) -->
+  <!-- FULL-SCREEN MOBILE / OVERLAY NAVIGATION DRAWER (With Visual Differentiation Between Titles & Language Dropdown) -->
   <div
     x-show="menuOpen"
     x-cloak
     x-transition.opacity.duration.250ms
-    class="fixed inset-0 z-50 bg-[#3563AD]/95 backdrop-blur-md text-white flex flex-col justify-between p-6 sm:p-10 overflow-y-auto"
+    class="fixed inset-0 z-50 bg-[#2C569D]/95 backdrop-blur-md text-white flex flex-col justify-between p-5 sm:p-8 overflow-y-auto"
   >
     <!-- Top Header inside Overlay -->
-    <div class="max-w-md w-full mx-auto flex items-center justify-between">
+    <div class="max-w-lg w-full mx-auto flex items-center justify-between pb-4 border-b border-white/15">
       <div class="flex items-center gap-2.5">
         <div class="text-xs font-semibold leading-tight text-blue-100 text-right">
           <div>Ukrainian</div>
@@ -161,46 +209,58 @@
       </div>
 
       <div class="flex items-center gap-5">
-        <button @click="menuOpen = false; cartOpen = true" class="flex items-center gap-1.5 text-white">
+        <button @click="menuOpen = false; cartOpen = true" class="flex items-center gap-1.5 text-white hover:text-ham-gold transition">
           <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
             <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
           </svg>
-          <span class="text-lg font-normal" x-text="cartTotalQty()">0</span>
+          <span class="text-lg font-medium" x-text="cartTotalQty()">0</span>
         </button>
 
-        <button @click="menuOpen = false" class="p-1 hover:text-ham-gold transition" aria-label="Close Menu">
-          <svg class="w-8 h-8 stroke-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <button @click="menuOpen = false" class="p-1.5 rounded-full bg-white/10 hover:bg-white/20 hover:text-ham-gold transition" aria-label="Close Menu">
+          <svg class="w-7 h-7 stroke-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
       </div>
     </div>
 
-    <!-- Center Vertical Menu Links (Reference Layout) -->
-    <nav class="my-auto py-8 flex flex-col items-center gap-5 text-center">
-      <a @click="menuOpen = false" href="#mission" class="text-3xl sm:text-4xl font-light tracking-wide hover:text-ham-gold transition" x-text="t('navMission')">Our Mission</a>
-      <a @click="menuOpen = false" href="#news" class="text-3xl sm:text-4xl font-light tracking-wide hover:text-ham-gold transition" x-text="t('navNews')">News</a>
-      <a @click="menuOpen = false" href="#projects" class="text-3xl sm:text-4xl font-light tracking-wide hover:text-ham-gold transition" x-text="t('navProjects')">Projects</a>
-      <a @click="menuOpen = false" href="#events" class="text-3xl sm:text-4xl font-light tracking-wide hover:text-ham-gold transition" x-text="t('navEvents')">Events</a>
-      <a @click="menuOpen = false" href="#contact" class="text-3xl sm:text-4xl font-light tracking-wide hover:text-ham-gold transition" x-text="t('navContact')">Contact</a>
-      <a @click="menuOpen = false" href="#policies" class="text-3xl sm:text-4xl font-light tracking-wide hover:text-ham-gold transition" x-text="t('navPolicies')">Policies</a>
+    <!-- Center Vertical Menu Links (Clearly Differentiated Cards with Subtitles & Dividers) -->
+    <nav class="my-auto py-6 max-w-md w-full mx-auto flex flex-col gap-2.5">
+      <template x-for="(item, idx) in menuItems()" :key="item.href">
+        <a
+          @click="menuOpen = false"
+          :href="item.href"
+          class="group flex items-center justify-between px-5 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/15 hover:border-ham-gold/60 transition shadow-sm"
+        >
+          <div class="flex items-center gap-4 text-left">
+            <span class="w-8 h-8 rounded-xl bg-ham-gold/20 border border-ham-gold/40 text-ham-gold font-bold text-xs flex items-center justify-center shrink-0" x-text="'0' + (idx + 1)"></span>
+            <div>
+              <span class="block text-xl sm:text-2xl font-semibold tracking-wide text-white group-hover:text-ham-gold transition" x-text="item.title"></span>
+              <span class="block text-xs text-blue-100/80 font-normal" x-text="item.desc"></span>
+            </div>
+          </div>
+          <svg class="w-5 h-5 text-blue-200 group-hover:text-ham-gold group-hover:translate-x-1 transition-transform shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </a>
+      </template>
     </nav>
 
-    <!-- Bottom Socials, Language Switcher & Yellow Donate Pill -->
-    <div class="max-w-xs w-full mx-auto flex flex-col items-center gap-6 pb-4">
+    <!-- Bottom Socials, Language Dropdown & Yellow Donate Pill -->
+    <div class="max-w-xs w-full mx-auto flex flex-col items-center gap-5 pt-4 border-t border-white/15">
       <!-- 4 Yellow Rounded Social Buttons -->
       <div class="flex items-center gap-4">
-        <a href="#contact" @click="menuOpen = false" class="w-12 h-12 rounded-xl bg-ham-gold hover:bg-ham-goldHover text-white flex items-center justify-center shadow transition" aria-label="Facebook">
+        <a href="#contact" @click="menuOpen = false" class="w-11 h-11 rounded-xl bg-ham-gold hover:bg-ham-goldHover text-slate-900 flex items-center justify-center shadow transition" aria-label="Facebook">
           <span class="font-bold text-xl">f</span>
         </a>
-        <a href="#contact" @click="menuOpen = false" class="w-12 h-12 rounded-xl bg-ham-gold hover:bg-ham-goldHover text-white flex items-center justify-center shadow transition" aria-label="LinkedIn">
+        <a href="#contact" @click="menuOpen = false" class="w-11 h-11 rounded-xl bg-ham-gold hover:bg-ham-goldHover text-slate-900 flex items-center justify-center shadow transition" aria-label="LinkedIn">
           <span class="font-bold text-lg">in</span>
         </a>
-        <a href="#contact" @click="menuOpen = false" class="w-12 h-12 rounded-xl bg-ham-gold hover:bg-ham-goldHover text-white flex items-center justify-center shadow transition" aria-label="X">
+        <a href="#contact" @click="menuOpen = false" class="w-11 h-11 rounded-xl bg-ham-gold hover:bg-ham-goldHover text-slate-900 flex items-center justify-center shadow transition" aria-label="X">
           <span class="font-semibold text-lg">𝕏</span>
         </a>
-        <a href="#contact" @click="menuOpen = false" class="w-12 h-12 rounded-xl bg-ham-gold hover:bg-ham-goldHover text-white flex items-center justify-center shadow transition" aria-label="Instagram">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <a href="#contact" @click="menuOpen = false" class="w-11 h-11 rounded-xl bg-ham-gold hover:bg-ham-goldHover text-slate-900 flex items-center justify-center shadow transition" aria-label="Instagram">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
             <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
             <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"></path>
             <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
@@ -208,26 +268,53 @@
         </a>
       </div>
 
-      <!-- Language Selector (Globe + English/Ukrainian + Chevron) -->
-      <button
-        @click="toggleLang()"
-        class="flex items-center gap-2.5 text-2xl font-light hover:text-ham-gold transition"
-      >
-        <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="2" y1="12" x2="22" y2="12"></line>
-          <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"></path>
-        </svg>
-        <span x-text="lang === 'en' ? 'English' : 'Українська'">English</span>
-        <svg class="w-5 h-5 opacity-80" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-        </svg>
-      </button>
+      <!-- Explicit Language Dropdown Selector inside Mobile Menu -->
+      <div class="w-full relative" x-data="{ mobileLangOpen: false }">
+        <button
+          @click="mobileLangOpen = !mobileLangOpen"
+          class="w-full py-2.5 px-4 rounded-xl bg-white/10 hover:bg-white/20 border border-white/25 flex items-center justify-between text-base font-medium transition"
+        >
+          <span class="flex items-center gap-2.5">
+            <svg class="w-5 h-5 text-ham-gold" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"></path>
+            </svg>
+            <span x-text="lang === 'en' ? '🇬🇧 English (Change Language)' : '🇺🇦 Українська (Змінити мову)'"></span>
+          </span>
+          <svg class="w-4 h-4 text-ham-gold transition-transform" :class="mobileLangOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+
+        <div
+          x-show="mobileLangOpen"
+          x-collapse
+          class="mt-2 rounded-xl bg-white text-slate-900 overflow-hidden shadow-lg divide-y divide-slate-100"
+        >
+          <button
+            @click="setLang('en'); mobileLangOpen = false"
+            class="w-full px-4 py-3 text-left text-sm flex items-center justify-between hover:bg-slate-100"
+            :class="lang === 'en' ? 'font-bold text-ham-blue bg-blue-50/50' : ''"
+          >
+            <span>🇬🇧 English (UK)</span>
+            <span x-show="lang === 'en'">✓</span>
+          </button>
+          <button
+            @click="setLang('uk'); mobileLangOpen = false"
+            class="w-full px-4 py-3 text-left text-sm flex items-center justify-between hover:bg-slate-100"
+            :class="lang === 'uk' ? 'font-bold text-ham-blue bg-blue-50/50' : ''"
+          >
+            <span>🇺🇦 Українська (UA)</span>
+            <span x-show="lang === 'uk'">✓</span>
+          </button>
+        </div>
+      </div>
 
       <!-- Full-width Pill Donate Button -->
       <button
         @click="menuOpen = false; donateOpen = true"
-        class="w-full py-3.5 rounded-full bg-ham-gold hover:bg-ham-goldHover text-white font-semibold text-base tracking-wide shadow-lg transition"
+        class="w-full py-3.5 rounded-full bg-ham-gold hover:bg-ham-goldHover text-slate-900 font-bold text-base tracking-wide shadow-lg transition"
         x-text="t('donateBtn')"
       >
         Donate
@@ -236,9 +323,8 @@
   </div>
 
   <main>
-    <!-- 1. HERO BLOCK (Filament HeroBlock: H1 <= 80 chars, Subtitle <= 160 chars) -->
-    <section class="relative bg-gradient-to-br from-ham-deep via-ham-blue to-[#264D8E] text-white overflow-hidden">
-      <!-- Subtle decorative Ukrainian geometric pattern aura -->
+    <!-- 1. HERO BLOCK -->
+    <section class="relative bg-gradient-to-br from-ham-deep via-ham-blue to-[#264D8E] text-white overflow-hidden border-b-4 border-ham-gold">
       <div class="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#FFD700_1px,transparent_1px)] [background-size:24px_24px]"></div>
       
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 relative z-10">
@@ -249,12 +335,10 @@
               <span x-text="t('heroTagline')">UKRAINIAN HAM CENTRE | CAMBRIDGE, UK</span>
             </div>
 
-            <!-- H1: 58/80 chars -->
-            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.12]" x-text="t('heroH1')">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.14]" x-text="t('heroH1')">
               Helping Ukrainians Rebuild, Belong and Thrive in Cambridge
             </h1>
 
-            <!-- Subtitle: 137/160 chars -->
             <p class="text-lg sm:text-xl text-blue-100 font-normal leading-relaxed max-w-2xl" x-text="t('heroSubtitle')">
               A community-led charity supporting displaced Ukrainians while building lasting cultural bridges between Ukrainian and British traditions.
             </p>
@@ -274,12 +358,6 @@
               >
                 Our Mission
               </a>
-              <button
-                @click="menuOpen = true"
-                class="sm:hidden px-5 py-4 rounded-full bg-white/5 border border-white/20 text-xs font-medium text-blue-100"
-              >
-                <span x-text="t('openMobileMenuPreview')">Open Mobile Menu</span>
-              </button>
             </div>
           </div>
 
@@ -318,12 +396,12 @@
       </div>
     </section>
 
-    <!-- 2. MISSION CARDS BLOCK (Filament MissionCardsBlock: 3 cards, strictly <= 250 chars each) -->
-    <section id="mission" class="py-20 bg-white border-b border-slate-200/80">
+    <!-- 2. MISSION CARDS BLOCK (White Background + Distinct Section Separator) -->
+    <section id="mission" class="py-20 bg-white relative">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="max-w-3xl mx-auto text-center mb-14">
-          <span class="text-xs font-bold uppercase tracking-widest text-ham-blue" x-text="t('missionEyebrow')">Identity & Purpose</span>
-          <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mt-2" x-text="t('missionHeading')">
+          <span class="inline-block px-3.5 py-1 rounded-full bg-ham-sky text-ham-blue text-xs font-bold uppercase tracking-widest" x-text="t('missionEyebrow')">Identity & Purpose</span>
+          <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mt-3" x-text="t('missionHeading')">
             Empowering Ukrainians, Enriching Cambridge
           </h2>
           <p class="text-slate-600 mt-3 text-base sm:text-lg" x-text="t('missionSub')">
@@ -333,11 +411,11 @@
 
         <div class="grid md:grid-cols-3 gap-8">
           <template x-for="(card, index) in missionCards()" :key="index">
-            <div class="bg-[#F8FAFC] rounded-2xl p-8 border border-slate-200/90 shadow-sm hover:shadow-md transition flex flex-col justify-between relative overflow-hidden">
+            <div class="bg-[#F4F7FB] rounded-2xl p-8 border-2 border-slate-200/90 shadow-sm hover:shadow-md hover:border-ham-blue/40 transition flex flex-col justify-between relative overflow-hidden">
               <div class="w-full h-1.5 bg-gradient-to-r from-ham-blue to-ham-gold absolute top-0 left-0"></div>
               <div>
                 <div class="flex items-center justify-between mb-5">
-                  <span class="w-10 h-10 rounded-xl bg-ham-blue/10 text-ham-blue font-bold flex items-center justify-center text-sm" x-text="'0' + (index + 1)"></span>
+                  <span class="w-10 h-10 rounded-xl bg-ham-blue text-white font-bold flex items-center justify-center text-sm" x-text="'0' + (index + 1)"></span>
                   <span class="text-xs font-medium text-slate-400" x-text="card.body.length + ' / 250 chars'"></span>
                 </div>
                 <h3 class="text-xl font-bold text-slate-900 mb-3" x-text="card.title"></h3>
@@ -349,24 +427,27 @@
       </div>
     </section>
 
-    <!-- 3. PILLARS SHOWCASE BLOCK (Filament PillarsShowcaseBlock: 6 interconnected areas, teasers <= 120 chars) -->
-    <section id="projects" class="py-20 bg-[#F8FAFC]">
+    <!-- VISIBLE TOPIC DIVIDER BAND -->
+    <div class="h-3 bg-gradient-to-r from-ham-deep via-ham-blue to-ham-gold"></div>
+
+    <!-- 3. PILLARS SHOWCASE BLOCK (Tinted Sky-Slate Background for Strong Visual Contrast) -->
+    <section id="projects" class="py-20 bg-[#E9F0FA]">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6">
           <div>
-            <span class="text-xs font-bold uppercase tracking-widest text-ham-blue" x-text="t('pillarsEyebrow')">What We Do • 6 Core Pillars</span>
-            <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mt-2" x-text="t('pillarsHeading')">
+            <span class="inline-block px-3.5 py-1 rounded-full bg-ham-blue/15 text-ham-deep text-xs font-bold uppercase tracking-widest" x-text="t('pillarsEyebrow')">What We Do • 6 Core Pillars</span>
+            <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mt-3" x-text="t('pillarsHeading')">
               Six Interconnected Areas of Impact
             </h2>
           </div>
-          <p class="text-slate-600 max-w-md text-sm sm:text-base" x-text="t('pillarsSub')">
+          <p class="text-slate-700 max-w-md text-sm sm:text-base" x-text="t('pillarsSub')">
             Click any pillar below to view its full UK Charity governance purpose or filter upcoming Cambridge events.
           </p>
         </div>
 
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
           <template x-for="(pillar, idx) in pillars()" :key="pillar.slug">
-            <article class="bg-white rounded-2xl p-7 border border-slate-200/80 shadow-sm hover:shadow-lg hover:border-ham-blue/40 transition flex flex-col justify-between group">
+            <article class="bg-white rounded-2xl p-7 border-2 border-slate-200/80 shadow-sm hover:shadow-xl hover:border-ham-blue transition flex flex-col justify-between group">
               <div>
                 <div class="flex items-center justify-between mb-5">
                   <div class="w-12 h-12 rounded-xl bg-ham-blue text-white flex items-center justify-center font-bold text-lg group-hover:bg-ham-gold group-hover:text-slate-900 transition">
@@ -403,20 +484,23 @@
       </div>
     </section>
 
-    <!-- 4. BENEFICIARIES BLOCK (Who Benefits — 5 Fixed Cards) + 5. MANIFESTO QUOTE BLOCK (Our Belief) -->
-    <section class="py-20 bg-white border-y border-slate-200/80">
+    <!-- VISIBLE TOPIC DIVIDER BAND -->
+    <div class="h-3 bg-gradient-to-r from-ham-gold via-ham-blue to-ham-deep"></div>
+
+    <!-- 4. BENEFICIARIES BLOCK + 5. MANIFESTO QUOTE BLOCK -->
+    <section class="py-20 bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
         
         <div>
           <div class="text-center max-w-2xl mx-auto mb-12">
-            <span class="text-xs font-bold uppercase tracking-widest text-ham-blue" x-text="t('whoBenefitsEyebrow')">Community Reach</span>
-            <h2 class="text-3xl font-bold text-slate-900 mt-2" x-text="t('whoBenefitsHeading')">Who Benefits From Our Work</h2>
+            <span class="inline-block px-3.5 py-1 rounded-full bg-ham-sky text-ham-blue text-xs font-bold uppercase tracking-widest" x-text="t('whoBenefitsEyebrow')">Community Reach</span>
+            <h2 class="text-3xl font-bold text-slate-900 mt-3" x-text="t('whoBenefitsHeading')">Who Benefits From Our Work</h2>
           </div>
 
           <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-5">
             <template x-for="(item, idx) in beneficiaries()" :key="idx">
-              <div class="bg-[#F8FAFC] rounded-2xl p-6 border border-slate-200/80 hover:border-ham-blue/40 transition">
-                <div class="w-8 h-8 rounded-full bg-ham-gold/25 text-slate-900 font-bold text-xs flex items-center justify-center mb-4" x-text="idx + 1"></div>
+              <div class="bg-[#F4F7FB] rounded-2xl p-6 border-2 border-slate-200/80 hover:border-ham-blue/50 transition">
+                <div class="w-8 h-8 rounded-full bg-ham-gold text-slate-900 font-bold text-xs flex items-center justify-center mb-4 shadow-sm" x-text="idx + 1"></div>
                 <h3 class="font-bold text-slate-900 text-base mb-2" x-text="item.group"></h3>
                 <p class="text-slate-600 text-xs sm:text-sm leading-relaxed" x-text="item.description"></p>
               </div>
@@ -425,7 +509,7 @@
         </div>
 
         <!-- ManifestoQuoteBlock (Our Belief) -->
-        <div class="bg-gradient-to-r from-ham-deep via-ham-blue to-ham-deep rounded-3xl p-8 sm:p-12 lg:p-14 text-white shadow-xl relative overflow-hidden">
+        <div class="bg-gradient-to-r from-ham-deep via-ham-blue to-ham-deep rounded-3xl p-8 sm:p-12 lg:p-14 text-white shadow-xl border-2 border-ham-gold/40 relative overflow-hidden">
           <div class="max-w-4xl mx-auto text-center space-y-6 relative z-10">
             <span class="inline-block px-3.5 py-1 rounded-full bg-white/10 text-ham-gold text-xs font-bold tracking-widest uppercase" x-text="t('beliefLabel')">Our Belief</span>
             <blockquote class="text-2xl sm:text-3xl lg:text-4xl font-semibold leading-snug tracking-tight" x-text="t('beliefQuote')">
@@ -440,43 +524,47 @@
       </div>
     </section>
 
-    <!-- 6. LIVEWIRE EVENT CALENDAR EQUIVALENT (#events with Pillar Filter & Cart Integration) -->
-    <section id="events" class="py-20 bg-[#F8FAFC]">
+    <!-- VISIBLE TOPIC DIVIDER BAND -->
+    <div class="h-3 bg-gradient-to-r from-ham-deep via-ham-blue to-ham-gold"></div>
+
+    <!-- 6. LIVEWIRE EVENT CALENDAR EQUIVALENT (#events with Empty State message when no events match) -->
+    <section id="events" class="py-20 bg-[#E9F0FA]">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row lg:items-end justify-between mb-10 gap-6">
           <div>
-            <span class="text-xs font-bold uppercase tracking-widest text-ham-blue" x-text="t('eventsEyebrow')">Cambridge Programme</span>
-            <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mt-2" x-text="t('eventsHeading')">Upcoming Events & Gatherings</h2>
+            <span class="inline-block px-3.5 py-1 rounded-full bg-ham-blue/15 text-ham-deep text-xs font-bold uppercase tracking-widest" x-text="t('eventsEyebrow')">Cambridge Programme</span>
+            <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mt-3" x-text="t('eventsHeading')">Upcoming Events & Gatherings</h2>
           </div>
 
           <!-- Pillar Filter Pills -->
           <div class="flex flex-wrap gap-2">
             <button
               @click="selectedPillar = 'all'"
-              :class="selectedPillar === 'all' ? 'bg-ham-blue text-white' : 'bg-white text-slate-700 hover:bg-slate-100'"
-              class="px-4 py-2 rounded-full text-xs font-semibold border border-slate-200 transition"
+              :class="selectedPillar === 'all' ? 'bg-ham-blue text-white shadow-sm' : 'bg-white text-slate-700 hover:bg-slate-100'"
+              class="px-4 py-2 rounded-full text-xs font-semibold border border-slate-300 transition"
               x-text="t('filterAll')"
             >
-              All Events
+              All Pillars
             </button>
             <template x-for="p in pillars()" :key="p.slug">
               <button
                 @click="selectedPillar = p.slug"
-                :class="selectedPillar === p.slug ? 'bg-ham-blue text-white' : 'bg-white text-slate-700 hover:bg-slate-100'"
-                class="px-3.5 py-2 rounded-full text-xs font-semibold border border-slate-200 transition"
+                :class="selectedPillar === p.slug ? 'bg-ham-blue text-white shadow-sm' : 'bg-white text-slate-700 hover:bg-slate-100'"
+                class="px-3.5 py-2 rounded-full text-xs font-semibold border border-slate-300 transition"
                 x-text="p.shortName"
               ></button>
             </template>
           </div>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-7">
+        <!-- Events Grid (When events exist) -->
+        <div x-show="filteredEvents().length > 0" class="grid md:grid-cols-3 gap-7">
           <template x-for="ev in filteredEvents()" :key="ev.id">
-            <div class="bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden flex flex-col justify-between">
+            <div class="bg-white rounded-2xl border-2 border-slate-200/90 shadow-sm hover:shadow-lg transition overflow-hidden flex flex-col justify-between">
               <div class="p-7">
                 <div class="flex items-center justify-between text-xs font-semibold text-ham-blue mb-3">
                   <span class="px-3 py-1 rounded-full bg-ham-sky" x-text="ev.date"></span>
-                  <span class="text-slate-500" x-text="ev.price === 0 ? t('freeEntry') : '£' + ev.price"></span>
+                  <span class="text-slate-600 font-bold" x-text="ev.price === 0 ? t('freeEntry') : '£' + ev.price"></span>
                 </div>
                 <h3 class="text-xl font-bold text-slate-900 mb-2" x-text="ev.title"></h3>
                 <p class="text-slate-600 text-sm leading-relaxed mb-4" x-text="ev.summary"></p>
@@ -485,8 +573,8 @@
                   <span x-text="ev.location"></span>
                 </div>
               </div>
-              <div class="px-7 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-                <span class="text-xs font-medium text-slate-500" x-text="ev.pillarLabel"></span>
+              <div class="px-7 py-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+                <span class="text-xs font-semibold text-slate-600" x-text="ev.pillarLabel"></span>
                 <button
                   @click="addToCart(ev)"
                   class="px-4 py-2 rounded-full bg-ham-blue hover:bg-ham-deep text-white text-xs font-semibold transition"
@@ -498,23 +586,50 @@
             </div>
           </template>
         </div>
+
+        <!-- Explicit Empty State when a selected category currently has 0 events -->
+        <div
+          x-show="filteredEvents().length === 0"
+          x-cloak
+          class="bg-white rounded-3xl border-2 border-dashed border-ham-blue/40 p-12 text-center max-w-2xl mx-auto shadow-sm"
+        >
+          <div class="w-14 h-14 rounded-2xl bg-ham-sky text-ham-blue flex items-center justify-center mx-auto mb-4 text-2xl">
+            📅
+          </div>
+          <h3 class="text-xl font-bold text-slate-900 mb-2" x-text="t('noEventsTitle')">
+            No events are currently available
+          </h3>
+          <p class="text-slate-600 text-sm sm:text-base mb-6" x-text="t('noEventsSub')">
+            There are currently no scheduled events under this specific pillar. New Cambridge workshops and gatherings are announced regularly.
+          </p>
+          <button
+            @click="selectedPillar = 'all'"
+            class="px-6 py-3 rounded-full bg-ham-blue hover:bg-ham-deep text-white text-xs sm:text-sm font-bold shadow transition"
+            x-text="t('viewAllEventsBtn')"
+          >
+            Show All Available Events
+          </button>
+        </div>
       </div>
     </section>
 
-    <!-- 7. NEWS & COMMUNITY UPDATES SECTION (#news - Inspired by the reference screenshot layout) -->
-    <section id="news" class="py-20 bg-white border-t border-slate-200/80">
+    <!-- VISIBLE TOPIC DIVIDER BAND -->
+    <div class="h-3 bg-gradient-to-r from-ham-gold via-ham-blue to-ham-deep"></div>
+
+    <!-- 7. NEWS & COMMUNITY UPDATES SECTION (#news) -->
+    <section id="news" class="py-20 bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-12">
-          <span class="text-xs font-bold uppercase tracking-widest text-ham-blue" x-text="t('newsEyebrow')">Latest Updates</span>
-          <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mt-2" x-text="t('newsHeading')">News & Community Highlights</h2>
+          <span class="inline-block px-3.5 py-1 rounded-full bg-ham-sky text-ham-blue text-xs font-bold uppercase tracking-widest" x-text="t('newsEyebrow')">Latest Updates</span>
+          <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mt-3" x-text="t('newsHeading')">News & Community Highlights</h2>
         </div>
 
         <div class="grid md:grid-cols-2 gap-10">
           <template x-for="(post, idx) in posts()" :key="idx">
-            <article class="group bg-[#F8FAFC] rounded-2xl p-8 border border-slate-200/80 hover:shadow-md transition">
+            <article class="group bg-[#F4F7FB] rounded-2xl p-8 border-2 border-slate-200/90 hover:border-ham-blue/50 hover:shadow-lg transition">
               <div class="flex items-center gap-4 text-sm text-slate-500 mb-3">
-                <span class="font-medium text-ham-blue" x-text="post.category">Information</span>
-                <span x-text="post.date">06/11/2026</span>
+                <span class="px-3 py-1 rounded-full bg-ham-blue/10 font-semibold text-ham-blue text-xs" x-text="post.category">Information</span>
+                <span class="font-medium" x-text="post.date">06/11/2026</span>
               </div>
               <h3 class="text-2xl font-bold text-slate-900 group-hover:text-ham-blue transition leading-snug mb-4" x-text="post.title"></h3>
               <p class="text-slate-600 text-sm sm:text-base leading-relaxed" x-text="post.excerpt"></p>
@@ -524,33 +639,36 @@
       </div>
     </section>
 
+    <!-- VISIBLE TOPIC DIVIDER BAND -->
+    <div class="h-3 bg-gradient-to-r from-ham-deep via-ham-blue to-ham-gold"></div>
+
     <!-- 8. GOVERNANCE ACCORDION BLOCK (#policies — Full UK Charity Commission Charitable Purposes 1–6) -->
-    <section id="policies" class="py-20 bg-[#F8FAFC] border-t border-slate-200/80">
+    <section id="policies" class="py-20 bg-[#E9F0FA]">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-          <span class="text-xs font-bold uppercase tracking-widest text-ham-blue" x-text="t('policiesEyebrow')">Governance & Transparency</span>
-          <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mt-2" x-text="t('policiesHeading')">
+          <span class="inline-block px-3.5 py-1 rounded-full bg-ham-blue/15 text-ham-deep text-xs font-bold uppercase tracking-widest" x-text="t('policiesEyebrow')">Governance & Transparency</span>
+          <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mt-3" x-text="t('policiesHeading')">
             Our Charitable Purposes & Policies
           </h2>
-          <p class="text-slate-600 mt-3 text-sm sm:text-base leading-relaxed" x-text="t('policiesIntro')">
+          <p class="text-slate-700 mt-3 text-sm sm:text-base leading-relaxed" x-text="t('policiesIntro')">
             The Ukrainian Heritage, Art & Music Centre was established to support Ukrainians affected by war and displacement. Below is our formal governing statement across six interconnected charitable purposes.
           </p>
         </div>
 
-        <div class="space-y-3">
+        <div class="space-y-3.5">
           <template x-for="(pillar, idx) in pillars()" :key="pillar.slug">
-            <div class="bg-white rounded-2xl border border-slate-200/90 overflow-hidden">
+            <div class="bg-white rounded-2xl border-2 border-slate-200/90 shadow-sm overflow-hidden">
               <button
                 @click="openAccordion = (openAccordion === idx ? null : idx)"
                 class="w-full px-6 py-5 text-left flex items-center justify-between font-bold text-slate-900 hover:bg-slate-50 transition"
               >
                 <span class="text-base sm:text-lg" x-text="(idx + 1) + '. ' + pillar.title"></span>
-                <span class="text-ham-blue text-xl font-light" x-text="openAccordion === idx ? '−' : '+'"></span>
+                <span class="w-8 h-8 rounded-full bg-ham-sky text-ham-blue flex items-center justify-center text-lg font-bold shrink-0" x-text="openAccordion === idx ? '−' : '+'"></span>
               </button>
               <div
                 x-show="openAccordion === idx"
                 x-collapse
-                class="px-6 pb-6 pt-1 text-slate-600 text-sm sm:text-base leading-relaxed border-t border-slate-100"
+                class="px-6 pb-6 pt-2 text-slate-600 text-sm sm:text-base leading-relaxed border-t border-slate-100"
               >
                 <p x-text="pillar.fullPurpose"></p>
               </div>
@@ -558,18 +676,18 @@
           </template>
         </div>
 
-        <!-- Compliance Badges (GDPR, Safeguarding, HMRC Gift Aid Readiness) -->
+        <!-- Compliance Badges -->
         <div class="mt-10 grid sm:grid-cols-3 gap-4 text-center">
-          <div class="bg-white p-4 rounded-xl border border-slate-200 text-xs text-slate-600">
-            <strong class="block text-slate-900 mb-1">UK GDPR Compliant</strong>
+          <div class="bg-white p-5 rounded-2xl border-2 border-slate-200/80 text-xs text-slate-600 shadow-sm">
+            <strong class="block text-slate-900 text-sm mb-1">UK GDPR Compliant</strong>
             Donor & beneficiary data handled with strict encryption and retention controls.
           </div>
-          <div class="bg-white p-4 rounded-xl border border-slate-200 text-xs text-slate-600">
-            <strong class="block text-slate-900 mb-1">Safeguarding Policy</strong>
+          <div class="bg-white p-5 rounded-2xl border-2 border-slate-200/80 text-xs text-slate-600 shadow-sm">
+            <strong class="block text-slate-900 text-sm mb-1">Safeguarding Policy</strong>
             Enhanced DBS checks for youth, educational, and vulnerable adult programmes.
           </div>
-          <div class="bg-white p-4 rounded-xl border border-slate-200 text-xs text-slate-600">
-            <strong class="block text-slate-900 mb-1">Transparent Accounting</strong>
+          <div class="bg-white p-5 rounded-2xl border-2 border-slate-200/80 text-xs text-slate-600 shadow-sm">
+            <strong class="block text-slate-900 text-sm mb-1">Transparent Accounting</strong>
             Stripe-verified donations & auditable HMRC Gift Aid declarations.
           </div>
         </div>
@@ -578,9 +696,9 @@
   </main>
 
   <!-- FOOTER & CONTACT (#contact) -->
-  <footer id="contact" class="bg-ham-navy text-white pt-16 pb-12">
+  <footer id="contact" class="bg-ham-navy text-white pt-16 pb-12 border-t-4 border-ham-gold">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid md:grid-cols-12 gap-10 pb-12 border-b border-white/10">
+      <div class="grid md:grid-cols-12 gap-10 pb-12 border-b border-white/15">
         <div class="md:col-span-5 space-y-4">
           <div class="flex items-center gap-3">
             <div class="w-8 h-6 flex rounded overflow-hidden">
@@ -601,11 +719,11 @@
         <div class="md:col-span-3 space-y-3 text-sm">
           <h4 class="font-bold text-ham-gold uppercase tracking-wider text-xs" x-text="t('footerNav')">Navigation</h4>
           <ul class="space-y-2 text-blue-100">
-            <li><a href="#mission" class="hover:text-white">Our Mission</a></li>
-            <li><a href="#projects" class="hover:text-white">What We Do (6 Pillars)</a></li>
-            <li><a href="#events" class="hover:text-white">Cambridge Events</a></li>
-            <li><a href="#news" class="hover:text-white">News & Reports</a></li>
-            <li><a href="#policies" class="hover:text-white">Charitable Purposes & Policies</a></li>
+            <li><a href="#mission" class="hover:text-white" x-text="t('navMission')">Our Mission</a></li>
+            <li><a href="#projects" class="hover:text-white" x-text="t('navProjects')">Projects</a></li>
+            <li><a href="#events" class="hover:text-white" x-text="t('navEvents')">Events</a></li>
+            <li><a href="#news" class="hover:text-white" x-text="t('navNews')">News</a></li>
+            <li><a href="#policies" class="hover:text-white" x-text="t('navPolicies')">Policies</a></li>
           </ul>
         </div>
 
@@ -626,12 +744,25 @@
 
       <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-blue-200 gap-4">
         <div>© 2026 Ukrainian Heritage, Art & Music Centre (Ukrainian HAM). All rights reserved.</div>
-        <div>Built on the TALL Stack Architecture (Laravel 11 • FilamentPHP v3 • Livewire • Tailwind)</div>
+        <div>
+          Created by
+          <a
+            href="https://t.me/s_gorodetskyy"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-ham-gold hover:text-white font-semibold underline underline-offset-4 transition inline-flex items-center gap-1"
+          >
+            <span>Stas Gorodetskyy</span>
+            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.692-1.653-1.123-2.678-1.799-1.185-.781-.417-1.21.258-1.911.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.009-1.252-.242-1.865-.442-.751-.244-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.015 3.333-1.386 4.025-1.627 4.477-1.635.099-.002.321.023.465.141.121.099.154.232.17.325.015.094.034.31.019.478z"/>
+            </svg>
+          </a>
+        </div>
       </div>
     </div>
   </footer>
 
-  <!-- LIVEWIRE DONATION MODAL EQUIVALENT (One-off / Monthly + HMRC UK Gift Aid) -->
+  <!-- LIVEWIRE DONATION MODAL EQUIVALENT -->
   <div
     x-show="donateOpen"
     x-cloak
@@ -647,7 +778,7 @@
         <button @click="donateOpen = false" class="p-2 text-slate-400 hover:text-slate-600">✕</button>
       </div>
 
-      <!-- Frequency Switcher (One-off / Monthly) -->
+      <!-- Frequency Switcher -->
       <div class="grid grid-cols-2 gap-2 p-1 bg-slate-100 rounded-xl my-5">
         <button
           @click="donation.frequency = 'one_off'"
@@ -675,7 +806,7 @@
         </template>
       </div>
 
-      <!-- UK Gift Aid Box (HMRC Compliant Fields) -->
+      <!-- UK Gift Aid Box -->
       <div class="bg-ham-sky/70 rounded-2xl p-4 border border-ham-blue/20 mb-5">
         <label class="flex items-start gap-3 cursor-pointer">
           <input type="checkbox" x-model="donation.giftAid" class="mt-1 w-4 h-4 rounded text-ham-blue focus:ring-ham-blue" />
@@ -706,7 +837,7 @@
     </div>
   </div>
 
-  <!-- TICKET CART DRAWER (Livewire TicketCart equivalent) -->
+  <!-- TICKET CART DRAWER -->
   <div
     x-show="cartOpen"
     x-cloak
@@ -752,6 +883,7 @@
     function hamApp() {
       return {
         lang: 'en',
+        langDropdownOpen: false,
         menuOpen: false,
         donateOpen: false,
         cartOpen: false,
@@ -769,8 +901,34 @@
         },
         cart: [],
 
+        setLang(newLang) {
+          this.lang = newLang;
+          document.documentElement.lang = newLang;
+        },
+
         toggleLang() {
-          this.lang = this.lang === 'en' ? 'uk' : 'en';
+          this.setLang(this.lang === 'en' ? 'uk' : 'en');
+        },
+
+        menuItems() {
+          if (this.lang === 'uk') {
+            return [
+              { href: '#mission', title: 'Наша місія', desc: 'Хто ми, бачення та цінності центру' },
+              { href: '#news', title: 'Новини', desc: 'Останні події та звіти громади' },
+              { href: '#projects', title: 'Напрямки діяльності', desc: '6 основних сфер підтримки та культури' },
+              { href: '#events', title: 'Афіша подій', desc: 'Концерти, зустрічі та освітні клуби у Кембриджі' },
+              { href: '#contact', title: 'Контакти', desc: 'Зв’язок із нами та локація у Кембриджі' },
+              { href: '#policies', title: 'Політики та Статут', desc: 'Офіційні благодійні цілі (Charitable Purposes)' }
+            ];
+          }
+          return [
+            { href: '#mission', title: 'Our Mission', desc: 'Who we are, our vision & core values' },
+            { href: '#news', title: 'News', desc: 'Community updates & impact highlights' },
+            { href: '#projects', title: 'Projects & Pillars', desc: '6 interconnected areas of charitable work' },
+            { href: '#events', title: 'Events', desc: 'Concerts, workshops & gatherings in Cambridge' },
+            { href: '#contact', title: 'Contact', desc: 'Get in touch with our Cambridge team' },
+            { href: '#policies', title: 'Policies & Governance', desc: 'Official UK Charity purposes & safeguarding' }
+          ];
         },
 
         addToCart(ev) {
@@ -803,7 +961,6 @@
               navPolicies: 'Policies',
               navContact: 'Contact',
               donateBtn: 'Donate',
-              openMobileMenuPreview: '☰ Preview Reference Mobile Menu',
               heroTagline: 'UKRAINIAN HAM CENTRE | CAMBRIDGE, UK',
               heroH1: 'Helping Ukrainians Rebuild, Belong and Thrive in Cambridge',
               heroSubtitle: 'A community-led charity supporting displaced Ukrainians while building lasting cultural bridges between Ukrainian and British traditions.',
@@ -832,6 +989,9 @@
               freeEntry: 'Free Entry',
               registerFreeBtn: 'Register Free',
               addTicketBtn: 'Add Ticket',
+              noEventsTitle: 'No events are currently available',
+              noEventsSub: 'There are currently no scheduled events in this specific category. New Cambridge workshops and gatherings are added regularly.',
+              viewAllEventsBtn: 'Show All Available Events',
               newsEyebrow: 'Latest Updates',
               newsHeading: 'News & Community Highlights',
               policiesEyebrow: 'Governance & Transparency',
@@ -849,15 +1009,14 @@
               cartEmpty: 'Your event cart is currently empty. Select an event in Cambridge to register.'
             },
             uk: {
-              cambridgeSub: 'Спадщина, Мистецтво та Музика • Кембридж',
-              navMission: 'Наша місія',
+              cambridgeSub: 'Спадщина та Мистецтво • Кембридж',
+              navMission: 'Місія',
               navProjects: 'Напрямки',
               navEvents: 'Події',
               navNews: 'Новини',
-              navPolicies: 'Статут і політики',
+              navPolicies: 'Політики',
               navContact: 'Контакти',
               donateBtn: 'Підтримати',
-              openMobileMenuPreview: '☰ Відкрити мобільне меню',
               heroTagline: 'УКРАЇНСЬКИЙ ЦЕНТР HAM | КЕМБРИДЖ, ВЕЛИКА БРИТАНІЯ',
               heroH1: 'Допомагаємо українцям відновлюватися, інтегруватися та розвиватися',
               heroSubtitle: 'Громадська благодійна ініціатива в Кембриджі, що підтримує українців та будує міцні культурні мости між Україною і Британією.',
@@ -886,6 +1045,9 @@
               freeEntry: 'Вхід вільний',
               registerFreeBtn: 'Зареєструватися',
               addTicketBtn: 'Додати квиток',
+              noEventsTitle: 'Наразі в цій категорії немає доступних подій',
+              noEventsSub: 'За цим напрямком зараз немає запланованих заходів. Ми регулярно оновлюємо розклад зустрічей у Кембриджі.',
+              viewAllEventsBtn: 'Показати всі доступні події',
               newsEyebrow: 'Останні оновлення',
               newsHeading: 'Новини та звіти громади',
               policiesEyebrow: 'Прозорість та управління',
