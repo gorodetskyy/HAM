@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ukrainian HAM Centre | Cambridge, UK — Heritage, Art & Music</title>
+  <meta name="description" content="A community-led charity in Cambridge supporting displaced Ukrainians while building lasting cultural bridges between Ukrainian and British traditions." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            ham: {
+              blue: '#3563AD',
+              deep: '#1E3F7A',
+              navy: '#12274D',
+              gold: '#DEC031',
+              goldHover: '#CBB025',
+              sky: '#EBF1FA'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    [x-cloak] { display: none !important; }
+  </style>
+</head>
+<body
+  x-data="hamApp()"
+  :class="{ 'overflow-hidden': menuOpen || donateOpen || cartOpen }"
+  class="bg-[#F8FAFC] text-slate-900 font-sans antialiased selection:bg-ham-gold selection:text-slate-900"
+>
+
+  <!-- TOP NAVIGATION BAR (Matches Reference + Desktop Nav) -->
+  <header class="sticky top-0 z-40 bg-ham-blue text-white shadow-md border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Brand Logo (Ukrainian + British Bridge Emblem) -->
+      <a href="#" class="flex items-center gap-3 group focus:outline-none">
+        <div class="flex items-center shadow-sm rounded overflow-hidden border border-white/20">
+          <!-- UA Half -->
+          <div class="w-6 h-8 flex flex-col">
+            <div class="h-1/2 bg-[#0057B7]"></div>
+            <div class="h-1/2 bg-[#FFD700]"></div>
+          </div>
+          <!-- UK Stylized Half -->
+          <div class="w-6 h-8 bg-[#012169] relative flex items-center justify-center overflow-hidden">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="w-10 h-1 bg-white rotate-45 absolute"></div>
+              <div class="w-10 h-1 bg-white -rotate-45 absolute"></div>
+              <div class="w-full h-1.5 bg-white absolute"></div>
+              <div class="h-full w-1.5 bg-white absolute"></div>
+              <div class="w-full h-1 bg-[#C8102E] absolute"></div>
+              <div class="h-full w-1 bg-[#C8102E] absolute"></div>
+            </div>
+          </div>
+        </div>
+        <div class="leading-tight">
+          <span class="block font-bold tracking-tight text-base sm:text-lg text-white group-hover:text-ham-gold transition">Ukrainian HAM</span>
+          <span class="block text-xs text-blue-100 font-light tracking-wider uppercase" x-text="t('cambridgeSub')">Heritage, Art & Music • Cambridge</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <nav class="hidden lg:flex items-center gap-7 text-sm font-medium text-blue-50">
+        <a href="#mission" class="hover:text-ham-gold transition" x-text="t('navMission')">Our Mission</a>
+        <a href="#projects" class="hover:text-ham-gold transition" x-text="t('navProjects')">Projects</a>
+        <a href="#events" class="hover:text-ham-gold transition" x-text="t('navEvents')">Events</a>
+        <a href="#news" class="hover:text-ham-gold transition" x-text="t('navNews')">News</a>
+        <a href="#policies" class="hover:text-ham-gold transition" x-text="t('navPolicies')">Policies</a>
+        <a href="#contact" class="hover:text-ham-gold transition" x-text="t('navContact')">Contact</a>
+      </nav>
+
+      <!-- Right Action Controls: Language, Cart, Donate, Mobile Hamburger -->
+      <div class="flex items-center gap-3 sm:gap-4">
+        <!-- Language Toggle -->
+        <button
+          @click="toggleLang()"
+          class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-xs font-semibold tracking-wide transition"
+          title="Switch Language (EN / UA)"
+        >
+          <svg class="w-4 h-4 text-ham-gold" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
+          </svg>
+          <span x-text="lang === 'en' ? 'English' : 'Українська'"></span>
+        </button>
+
+        <!-- Ticket Cart Button (Livewire TicketCart equivalent) -->
+        <button
+          @click="cartOpen = true"
+          class="relative inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg hover:bg-white/10 transition"
+          aria-label="Event Tickets Cart"
+        >
+          <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+          </svg>
+          <span class="text-base font-medium" x-text="cartTotalQty()">0</span>
+        </button>
+
+        <!-- Donate Pill Button -->
+        <button
+          @click="donateOpen = true"
+          class="hidden sm:inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-ham-gold hover:bg-ham-goldHover text-slate-900 font-semibold text-sm shadow-sm transition transform active:scale-95"
+          x-text="t('donateBtn')"
+        >
+          Donate
+        </button>
+
+        <!-- Full-screen Overlay Menu Trigger (Mobile + Reference Drawer) -->
+        <button
+          @click="menuOpen = true"
+          class="inline-flex items-center justify-center p-2 rounded-lg hover:bg-white/10 transition focus:outline-none"
+          aria-label="Open Menu"
+        >
+          <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- FULL-SCREEN MOBILE / OVERLAY NAVIGATION DRAWER (Directly inspired by reference screenshot, with improved contrast blur) -->
+  <div
+    x-show="menuOpen"
+    x-cloak
+    x-transition.opacity.duration.250ms
+    class="fixed inset-0 z-50 bg-[#3563AD]/95 backdrop-blur-md text-white flex flex-col justify-between p-6 sm:p-10 overflow-y-auto"
+  >
+    <!-- Top Header inside Overlay -->
+    <div class="max-w-md w-full mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <div class="text-xs font-semibold leading-tight text-blue-100 text-right">
+          <div>Ukrainian</div>
+          <div>HAM</div>
+        </div>
+        <div class="flex items-center shadow-sm rounded overflow-hidden border border-white/30">
+          <div class="w-6 h-8 flex flex-col">
+            <div class="h-1/2 bg-[#0057B7]"></div>
+            <div class="h-1/2 bg-[#FFD700]"></div>
+          </div>
+          <div class="w-6 h-8 bg-[#012169] relative flex items-center justify-center overflow-hidden">
+            <div class="w-10 h-1 bg-white rotate-45 absolute"></div>
+            <div class="w-10 h-1 bg-white -rotate-45 absolute"></div>
+            <div class="w-full h-1.5 bg-white absolute"></div>
+            <div class="h-full w-1.5 bg-white absolute"></div>
+            <div class="w-full h-1 bg-[#C8102E] absolute"></div>
+            <div class="h-full w-1 bg-[#C8102E] absolute"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-5">
+        <button @click="menuOpen = false; cartOpen = true" class="flex items-center gap-1.5 text-white">
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+          </svg>
+          <span class="text-lg font-normal" x-text="cartTotalQty()">0</span>
+        </button>
+
+        <button @click="menuOpen = false" class="p-1 hover:text-ham-gold transition" aria-label="Close Menu">
+          <svg class="w-8 h-8 stroke-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Center Vertical Menu Links (Reference Layout) -->
+    <nav class="my-auto py-8 flex flex-col items-center gap-5 text-center">
+      <a @click="menuOpen = false" href="#mission" class="text-3xl sm:text-4xl font-light tracking-wide hover:text-ham-gold transition" x-text="t('navMission')">Our Mission</a>
+      <a @click="menuOpen = false" href="#news" class="text-3xl sm:text-4xl font-light tracking-wide hover:text-ham-gold transition" x-text="t('navNews')">News</a>
+      <a @click="menuOpen = false" href="#projects" class="text-3xl sm:text-4xl font-light tracking-wide hover:text-ham-gold transition" x-text="t('navProjects')">Projects</a>
+      <a @click="menuOpen = false" href="#events" class="text-3xl sm:text-4xl font-light tracking-wide hover:text-ham-gold transition" x-text="t('navEvents')">Events</a>
+      <a @click="menuOpen = false" href="#contact" class="text-3xl sm:text-4xl font-light tracking-wide hover:text-ham-gold transition" x-text="t('navContact')">Contact</a>
+      <a @click="menuOpen = false" href="#policies" class="text-3xl sm:text-4xl font-light tracking-wide hover:text-ham-gold transition" x-text="t('navPolicies')">Policies</a>
+    </nav>
+
+    <!-- Bottom Socials, Language Switcher & Yellow Donate Pill -->
+    <div class="max-w-xs w-full mx-auto flex flex-col items-center gap-6 pb-4">
+      <!-- 4 Yellow Rounded Social Buttons -->
+      <div class="flex items-center gap-4">
+        <a href="#contact" @click="menuOpen = false" class="w-12 h-12 rounded-xl bg-ham-gold hover:bg-ham-goldHover text-white flex items-center justify-center shadow transition" aria-label="Facebook">
+          <span class="font-bold text-xl">f</span>
+        </a>
+        <a href="#contact" @click="menuOpen = false" class="w-12 h-12 rounded-xl bg-ham-gold hover:bg-ham-goldHover text-white flex items-center justify-center shadow transition" aria-label="LinkedIn">
+          <span class="font-bold text-lg">in</span>
+        </a>
+        <a href="#contact" @click="menuOpen = false" class="w-12 h-12 rounded-xl bg-ham-gold hover:bg-ham-goldHover text-white flex items-center justify-center shadow transition" aria-label="X">
+          <span class="font-semibold text-lg">𝕏</span>
+        </a>
+        <a href="#contact" @click="menuOpen = false" class="w-12 h-12 rounded-xl bg-ham-gold hover:bg-ham-goldHover text-white flex items-center justify-center shadow transition" aria-label="Instagram">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+        </a>
+      </div>
+
+      <!-- Language Selector (Globe + English/Ukrainian + Chevron) -->
+      <button
+        @click="toggleLang()"
+        class="flex items-center gap-2.5 text-2xl font-light hover:text-ham-gold transition"
+      >
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="2" y1="12" x2="22" y2="12"></line>
+          <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"></path>
+        </svg>
+        <span x-text="lang === 'en' ? 'English' : 'Українська'">English</span>
+        <svg class="w-5 h-5 opacity-80" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+
+      <!-- Full-width Pill Donate Button -->
+      <button
+        @click="menuOpen = false; donateOpen = true"
+        class="w-full py-3.5 rounded-full bg-ham-gold hover:bg-ham-goldHover text-white font-semibold text-base tracking-wide shadow-lg transition"
+        x-text="t('donateBtn')"
+      >
+        Donate
+      </button>
+    </div>
+  </div>
+
+  <main>
+    <!-- 1. HERO BLOCK (Filament HeroBlock: H1 <= 80 chars, Subtitle <= 160 chars) -->
+    <section class="relative bg-gradient-to-br from-ham-deep via-ham-blue to-[#264D8E] text-white overflow-hidden">
+      <!-- Subtle decorative Ukrainian geometric pattern aura -->
+      <div class="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#FFD700_1px,transparent_1px)] [background-size:24px_24px]"></div>
+      
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 relative z-10">
+        <div class="grid lg:grid-cols-12 gap-12 items-center">
+          <div class="lg:col-span-7 space-y-6">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 text-ham-gold text-xs font-semibold tracking-widest uppercase">
+              <span class="w-2 h-2 rounded-full bg-ham-gold animate-pulse"></span>
+              <span x-text="t('heroTagline')">UKRAINIAN HAM CENTRE | CAMBRIDGE, UK</span>
+            </div>
+
+            <!-- H1: 58/80 chars -->
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.12]" x-text="t('heroH1')">
+              Helping Ukrainians Rebuild, Belong and Thrive in Cambridge
+            </h1>
+
+            <!-- Subtitle: 137/160 chars -->
+            <p class="text-lg sm:text-xl text-blue-100 font-normal leading-relaxed max-w-2xl" x-text="t('heroSubtitle')">
+              A community-led charity supporting displaced Ukrainians while building lasting cultural bridges between Ukrainian and British traditions.
+            </p>
+
+            <div class="pt-2 flex flex-wrap items-center gap-4">
+              <button
+                @click="donateOpen = true"
+                class="px-8 py-4 rounded-full bg-ham-gold hover:bg-ham-goldHover text-slate-900 font-bold text-base shadow-lg transition transform hover:-translate-y-0.5"
+                x-text="t('donateBtn')"
+              >
+                Donate
+              </button>
+              <a
+                href="#mission"
+                class="px-7 py-4 rounded-full bg-white/10 hover:bg-white/20 border border-white/30 text-white font-semibold text-base transition"
+                x-text="t('navMission')"
+              >
+                Our Mission
+              </a>
+              <button
+                @click="menuOpen = true"
+                class="sm:hidden px-5 py-4 rounded-full bg-white/5 border border-white/20 text-xs font-medium text-blue-100"
+              >
+                <span x-text="t('openMobileMenuPreview')">Open Mobile Menu</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Right Visual Feature Card -->
+          <div class="lg:col-span-5">
+            <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
+              <div class="flex items-center justify-between border-b border-white/15 pb-4">
+                <div>
+                  <span class="text-xs uppercase tracking-wider text-ham-gold font-semibold" x-text="t('bridgeLabel')">Two Rich Traditions</span>
+                  <h2 class="text-xl font-bold text-white mt-0.5" x-text="t('bridgeTitle')">Connecting Communities</h2>
+                </div>
+                <span class="px-3 py-1 rounded-full bg-ham-gold/20 text-ham-gold text-xs font-bold">Est. 2022</span>
+              </div>
+
+              <p class="text-sm sm:text-base text-blue-50 leading-relaxed" x-text="t('bridgeLead')">
+                We believe that heritage connects generations, culture brings communities closer, and shared experiences create a stronger, more inclusive society in Cambridge.
+              </p>
+
+              <div class="grid grid-cols-3 gap-3 pt-2 text-center">
+                <div class="bg-white/10 rounded-2xl p-3.5">
+                  <div class="text-2xl font-extrabold text-ham-gold">6</div>
+                  <div class="text-xs text-blue-100 mt-1" x-text="t('statPillars')">Core Pillars</div>
+                </div>
+                <div class="bg-white/10 rounded-2xl p-3.5">
+                  <div class="text-2xl font-extrabold text-ham-gold">2-Way</div>
+                  <div class="text-xs text-blue-100 mt-1" x-text="t('statIntegration')">UK–UA Bridge</div>
+                </div>
+                <div class="bg-white/10 rounded-2xl p-3.5">
+                  <div class="text-2xl font-extrabold text-ham-gold">100%</div>
+                  <div class="text-xs text-blue-100 mt-1" x-text="t('statCommunity')">Community-Led</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. MISSION CARDS BLOCK (Filament MissionCardsBlock: 3 cards, strictly <= 250 chars each) -->
+    <section id="mission" class="py-20 bg-white border-b border-slate-200/80">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto text-center mb-14">
+          <span class="text-xs font-bold uppercase tracking-widest text-ham-blue" x-text="t('missionEyebrow')">Identity & Purpose</span>
+          <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mt-2" x-text="t('missionHeading')">
+            Empowering Ukrainians, Enriching Cambridge
+          </h2>
+          <p class="text-slate-600 mt-3 text-base sm:text-lg" x-text="t('missionSub')">
+            Structured, concise clarity on who we are, how we work, and the future we are building together.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+          <template x-for="(card, index) in missionCards()" :key="index">
+            <div class="bg-[#F8FAFC] rounded-2xl p-8 border border-slate-200/90 shadow-sm hover:shadow-md transition flex flex-col justify-between relative overflow-hidden">
+              <div class="w-full h-1.5 bg-gradient-to-r from-ham-blue to-ham-gold absolute top-0 left-0"></div>
+              <div>
+                <div class="flex items-center justify-between mb-5">
+                  <span class="w-10 h-10 rounded-xl bg-ham-blue/10 text-ham-blue font-bold flex items-center justify-center text-sm" x-text="'0' + (index + 1)"></span>
+                  <span class="text-xs font-medium text-slate-400" x-text="card.body.length + ' / 250 chars'"></span>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 mb-3" x-text="card.title"></h3>
+                <p class="text-slate-600 leading-relaxed text-sm sm:text-base" x-text="card.body"></p>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. PILLARS SHOWCASE BLOCK (Filament PillarsShowcaseBlock: 6 interconnected areas, teasers <= 120 chars) -->
+    <section id="projects" class="py-20 bg-[#F8FAFC]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-widest text-ham-blue" x-text="t('pillarsEyebrow')">What We Do • 6 Core Pillars</span>
+            <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mt-2" x-text="t('pillarsHeading')">
+              Six Interconnected Areas of Impact
+            </h2>
+          </div>
+          <p class="text-slate-600 max-w-md text-sm sm:text-base" x-text="t('pillarsSub')">
+            Click any pillar below to view its full UK Charity governance purpose or filter upcoming Cambridge events.
+          </p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
+          <template x-for="(pillar, idx) in pillars()" :key="pillar.slug">
+            <article class="bg-white rounded-2xl p-7 border border-slate-200/80 shadow-sm hover:shadow-lg hover:border-ham-blue/40 transition flex flex-col justify-between group">
+              <div>
+                <div class="flex items-center justify-between mb-5">
+                  <div class="w-12 h-12 rounded-xl bg-ham-blue text-white flex items-center justify-center font-bold text-lg group-hover:bg-ham-gold group-hover:text-slate-900 transition">
+                    <span x-text="idx + 1"></span>
+                  </div>
+                  <span class="text-xs font-medium px-2.5 py-1 rounded-full bg-slate-100 text-slate-500" x-text="pillar.teaser.length + '/120 chars'"></span>
+                </div>
+
+                <h3 class="text-lg font-bold text-slate-900 group-hover:text-ham-blue transition mb-2.5" x-text="pillar.title"></h3>
+                <p class="text-slate-600 text-sm leading-relaxed" x-text="pillar.teaser"></p>
+              </div>
+
+              <div class="pt-6 mt-6 border-t border-slate-100 flex items-center justify-between text-xs font-semibold">
+                <a
+                  href="#policies"
+                  @click="openAccordion = idx"
+                  class="text-ham-blue hover:text-ham-deep inline-flex items-center gap-1"
+                >
+                  <span x-text="t('readFullPurpose')">Full Purpose</span>
+                  <span>→</span>
+                </a>
+                <a
+                  href="#events"
+                  @click="selectedPillar = pillar.slug"
+                  class="text-slate-500 hover:text-slate-900"
+                  x-text="t('filterEvents')"
+                >
+                  Related Events
+                </a>
+              </div>
+            </article>
+          </template>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. BENEFICIARIES BLOCK (Who Benefits — 5 Fixed Cards) + 5. MANIFESTO QUOTE BLOCK (Our Belief) -->
+    <section class="py-20 bg-white border-y border-slate-200/80">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+        
+        <div>
+          <div class="text-center max-w-2xl mx-auto mb-12">
+            <span class="text-xs font-bold uppercase tracking-widest text-ham-blue" x-text="t('whoBenefitsEyebrow')">Community Reach</span>
+            <h2 class="text-3xl font-bold text-slate-900 mt-2" x-text="t('whoBenefitsHeading')">Who Benefits From Our Work</h2>
+          </div>
+
+          <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-5">
+            <template x-for="(item, idx) in beneficiaries()" :key="idx">
+              <div class="bg-[#F8FAFC] rounded-2xl p-6 border border-slate-200/80 hover:border-ham-blue/40 transition">
+                <div class="w-8 h-8 rounded-full bg-ham-gold/25 text-slate-900 font-bold text-xs flex items-center justify-center mb-4" x-text="idx + 1"></div>
+                <h3 class="font-bold text-slate-900 text-base mb-2" x-text="item.group"></h3>
+                <p class="text-slate-600 text-xs sm:text-sm leading-relaxed" x-text="item.description"></p>
+              </div>
+            </template>
+          </div>
+        </div>
+
+        <!-- ManifestoQuoteBlock (Our Belief) -->
+        <div class="bg-gradient-to-r from-ham-deep via-ham-blue to-ham-deep rounded-3xl p-8 sm:p-12 lg:p-14 text-white shadow-xl relative overflow-hidden">
+          <div class="max-w-4xl mx-auto text-center space-y-6 relative z-10">
+            <span class="inline-block px-3.5 py-1 rounded-full bg-white/10 text-ham-gold text-xs font-bold tracking-widest uppercase" x-text="t('beliefLabel')">Our Belief</span>
+            <blockquote class="text-2xl sm:text-3xl lg:text-4xl font-semibold leading-snug tracking-tight" x-text="t('beliefQuote')">
+              “Our purpose is to transform displacement into opportunity, individual talent into community strength, and cultural diversity into mutual understanding.”
+            </blockquote>
+            <p class="text-ham-gold font-bold text-base sm:text-lg tracking-wide pt-2" x-text="t('beliefSlogan')">
+              Every generation matters. Every talent has value. Every person deserves to belong and contribute.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 6. LIVEWIRE EVENT CALENDAR EQUIVALENT (#events with Pillar Filter & Cart Integration) -->
+    <section id="events" class="py-20 bg-[#F8FAFC]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between mb-10 gap-6">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-widest text-ham-blue" x-text="t('eventsEyebrow')">Cambridge Programme</span>
+            <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mt-2" x-text="t('eventsHeading')">Upcoming Events & Gatherings</h2>
+          </div>
+
+          <!-- Pillar Filter Pills -->
+          <div class="flex flex-wrap gap-2">
+            <button
+              @click="selectedPillar = 'all'"
+              :class="selectedPillar === 'all' ? 'bg-ham-blue text-white' : 'bg-white text-slate-700 hover:bg-slate-100'"
+              class="px-4 py-2 rounded-full text-xs font-semibold border border-slate-200 transition"
+              x-text="t('filterAll')"
+            >
+              All Events
+            </button>
+            <template x-for="p in pillars()" :key="p.slug">
+              <button
+                @click="selectedPillar = p.slug"
+                :class="selectedPillar === p.slug ? 'bg-ham-blue text-white' : 'bg-white text-slate-700 hover:bg-slate-100'"
+                class="px-3.5 py-2 rounded-full text-xs font-semibold border border-slate-200 transition"
+                x-text="p.shortName"
+              ></button>
+            </template>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-7">
+          <template x-for="ev in filteredEvents()" :key="ev.id">
+            <div class="bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden flex flex-col justify-between">
+              <div class="p-7">
+                <div class="flex items-center justify-between text-xs font-semibold text-ham-blue mb-3">
+                  <span class="px-3 py-1 rounded-full bg-ham-sky" x-text="ev.date"></span>
+                  <span class="text-slate-500" x-text="ev.price === 0 ? t('freeEntry') : '£' + ev.price"></span>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 mb-2" x-text="ev.title"></h3>
+                <p class="text-slate-600 text-sm leading-relaxed mb-4" x-text="ev.summary"></p>
+                <div class="text-xs text-slate-500 flex items-center gap-1.5">
+                  <span>📍</span>
+                  <span x-text="ev.location"></span>
+                </div>
+              </div>
+              <div class="px-7 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+                <span class="text-xs font-medium text-slate-500" x-text="ev.pillarLabel"></span>
+                <button
+                  @click="addToCart(ev)"
+                  class="px-4 py-2 rounded-full bg-ham-blue hover:bg-ham-deep text-white text-xs font-semibold transition"
+                  x-text="ev.price === 0 ? t('registerFreeBtn') : t('addTicketBtn')"
+                >
+                  Book Place
+                </button>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. NEWS & COMMUNITY UPDATES SECTION (#news - Inspired by the reference screenshot layout) -->
+    <section id="news" class="py-20 bg-white border-t border-slate-200/80">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-12">
+          <span class="text-xs font-bold uppercase tracking-widest text-ham-blue" x-text="t('newsEyebrow')">Latest Updates</span>
+          <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mt-2" x-text="t('newsHeading')">News & Community Highlights</h2>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-10">
+          <template x-for="(post, idx) in posts()" :key="idx">
+            <article class="group bg-[#F8FAFC] rounded-2xl p-8 border border-slate-200/80 hover:shadow-md transition">
+              <div class="flex items-center gap-4 text-sm text-slate-500 mb-3">
+                <span class="font-medium text-ham-blue" x-text="post.category">Information</span>
+                <span x-text="post.date">06/11/2026</span>
+              </div>
+              <h3 class="text-2xl font-bold text-slate-900 group-hover:text-ham-blue transition leading-snug mb-4" x-text="post.title"></h3>
+              <p class="text-slate-600 text-sm sm:text-base leading-relaxed" x-text="post.excerpt"></p>
+            </article>
+          </template>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. GOVERNANCE ACCORDION BLOCK (#policies — Full UK Charity Commission Charitable Purposes 1–6) -->
+    <section id="policies" class="py-20 bg-[#F8FAFC] border-t border-slate-200/80">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <span class="text-xs font-bold uppercase tracking-widest text-ham-blue" x-text="t('policiesEyebrow')">Governance & Transparency</span>
+          <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mt-2" x-text="t('policiesHeading')">
+            Our Charitable Purposes & Policies
+          </h2>
+          <p class="text-slate-600 mt-3 text-sm sm:text-base leading-relaxed" x-text="t('policiesIntro')">
+            The Ukrainian Heritage, Art & Music Centre was established to support Ukrainians affected by war and displacement. Below is our formal governing statement across six interconnected charitable purposes.
+          </p>
+        </div>
+
+        <div class="space-y-3">
+          <template x-for="(pillar, idx) in pillars()" :key="pillar.slug">
+            <div class="bg-white rounded-2xl border border-slate-200/90 overflow-hidden">
+              <button
+                @click="openAccordion = (openAccordion === idx ? null : idx)"
+                class="w-full px-6 py-5 text-left flex items-center justify-between font-bold text-slate-900 hover:bg-slate-50 transition"
+              >
+                <span class="text-base sm:text-lg" x-text="(idx + 1) + '. ' + pillar.title"></span>
+                <span class="text-ham-blue text-xl font-light" x-text="openAccordion === idx ? '−' : '+'"></span>
+              </button>
+              <div
+                x-show="openAccordion === idx"
+                x-collapse
+                class="px-6 pb-6 pt-1 text-slate-600 text-sm sm:text-base leading-relaxed border-t border-slate-100"
+              >
+                <p x-text="pillar.fullPurpose"></p>
+              </div>
+            </div>
+          </template>
+        </div>
+
+        <!-- Compliance Badges (GDPR, Safeguarding, HMRC Gift Aid Readiness) -->
+        <div class="mt-10 grid sm:grid-cols-3 gap-4 text-center">
+          <div class="bg-white p-4 rounded-xl border border-slate-200 text-xs text-slate-600">
+            <strong class="block text-slate-900 mb-1">UK GDPR Compliant</strong>
+            Donor & beneficiary data handled with strict encryption and retention controls.
+          </div>
+          <div class="bg-white p-4 rounded-xl border border-slate-200 text-xs text-slate-600">
+            <strong class="block text-slate-900 mb-1">Safeguarding Policy</strong>
+            Enhanced DBS checks for youth, educational, and vulnerable adult programmes.
+          </div>
+          <div class="bg-white p-4 rounded-xl border border-slate-200 text-xs text-slate-600">
+            <strong class="block text-slate-900 mb-1">Transparent Accounting</strong>
+            Stripe-verified donations & auditable HMRC Gift Aid declarations.
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER & CONTACT (#contact) -->
+  <footer id="contact" class="bg-ham-navy text-white pt-16 pb-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-12 gap-10 pb-12 border-b border-white/10">
+        <div class="md:col-span-5 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-6 flex rounded overflow-hidden">
+              <div class="w-1/2 bg-[#0057B7]"></div>
+              <div class="w-1/2 bg-[#FFD700]"></div>
+            </div>
+            <span class="font-bold text-xl">Ukrainian HAM Centre</span>
+          </div>
+          <p class="text-blue-100 text-sm leading-relaxed max-w-sm" x-text="t('footerDesc')">
+            Ukrainian Heritage, Art & Music Centre — Cambridge, United Kingdom. Connecting communities through heritage, art, music, and mutual support.
+          </p>
+          <div class="text-xs text-blue-200 space-y-1 pt-2">
+            <div>📍 Cambridge, Cambridgeshire, United Kingdom</div>
+            <div>✉️ info@ukrainianham.org.uk</div>
+          </div>
+        </div>
+
+        <div class="md:col-span-3 space-y-3 text-sm">
+          <h4 class="font-bold text-ham-gold uppercase tracking-wider text-xs" x-text="t('footerNav')">Navigation</h4>
+          <ul class="space-y-2 text-blue-100">
+            <li><a href="#mission" class="hover:text-white">Our Mission</a></li>
+            <li><a href="#projects" class="hover:text-white">What We Do (6 Pillars)</a></li>
+            <li><a href="#events" class="hover:text-white">Cambridge Events</a></li>
+            <li><a href="#news" class="hover:text-white">News & Reports</a></li>
+            <li><a href="#policies" class="hover:text-white">Charitable Purposes & Policies</a></li>
+          </ul>
+        </div>
+
+        <div class="md:col-span-4 space-y-4">
+          <h4 class="font-bold text-ham-gold uppercase tracking-wider text-xs" x-text="t('footerSupport')">Support Our Centre</h4>
+          <p class="text-xs text-blue-100 leading-relaxed" x-text="t('footerSupportText')">
+            Every contribution helps us run educational programmes for children, support older Ukrainians, and host cultural events in Cambridge.
+          </p>
+          <button
+            @click="donateOpen = true"
+            class="w-full sm:w-auto px-8 py-3 rounded-full bg-ham-gold hover:bg-ham-goldHover text-slate-900 font-bold text-sm transition"
+            x-text="t('donateBtn')"
+          >
+            Donate
+          </button>
+        </div>
+      </div>
+
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-blue-200 gap-4">
+        <div>© 2026 Ukrainian Heritage, Art & Music Centre (Ukrainian HAM). All rights reserved.</div>
+        <div>Built on the TALL Stack Architecture (Laravel 11 • FilamentPHP v3 • Livewire • Tailwind)</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- LIVEWIRE DONATION MODAL EQUIVALENT (One-off / Monthly + HMRC UK Gift Aid) -->
+  <div
+    x-show="donateOpen"
+    x-cloak
+    x-transition.opacity
+    class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
+  >
+    <div @click.away="donateOpen = false" class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-200 my-8">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-ham-blue">Ukrainian HAM • Cambridge</span>
+          <h3 class="text-2xl font-bold text-slate-900" x-text="t('donateModalTitle')">Support Our Community</h3>
+        </div>
+        <button @click="donateOpen = false" class="p-2 text-slate-400 hover:text-slate-600">✕</button>
+      </div>
+
+      <!-- Frequency Switcher (One-off / Monthly) -->
+      <div class="grid grid-cols-2 gap-2 p-1 bg-slate-100 rounded-xl my-5">
+        <button
+          @click="donation.frequency = 'one_off'"
+          :class="donation.frequency === 'one_off' ? 'bg-white text-slate-900 shadow-sm font-bold' : 'text-slate-600'"
+          class="py-2.5 rounded-lg text-sm transition"
+          x-text="t('oneOff')"
+        >One-off Donation</button>
+        <button
+          @click="donation.frequency = 'monthly'"
+          :class="donation.frequency === 'monthly' ? 'bg-white text-slate-900 shadow-sm font-bold' : 'text-slate-600'"
+          class="py-2.5 rounded-lg text-sm transition"
+          x-text="t('monthly')"
+        >Monthly Support</button>
+      </div>
+
+      <!-- Amount Presets -->
+      <div class="grid grid-cols-4 gap-2.5 mb-5">
+        <template x-for="amt in [15, 25, 50, 100]" :key="amt">
+          <button
+            @click="donation.amount = amt"
+            :class="donation.amount === amt ? 'bg-ham-blue text-white border-ham-blue' : 'bg-white text-slate-800 border-slate-200 hover:border-ham-blue'"
+            class="py-3 rounded-xl border font-bold text-base transition"
+            x-text="'£' + amt"
+          ></button>
+        </template>
+      </div>
+
+      <!-- UK Gift Aid Box (HMRC Compliant Fields) -->
+      <div class="bg-ham-sky/70 rounded-2xl p-4 border border-ham-blue/20 mb-5">
+        <label class="flex items-start gap-3 cursor-pointer">
+          <input type="checkbox" x-model="donation.giftAid" class="mt-1 w-4 h-4 rounded text-ham-blue focus:ring-ham-blue" />
+          <div class="text-xs leading-relaxed text-slate-700">
+            <strong class="text-slate-900 block text-sm">Boost your donation by 25p for every £1 with UK Gift Aid</strong>
+            I am a UK taxpayer and understand that if I pay less Income Tax and/or Capital Gains Tax than the amount of Gift Aid claimed on all my donations in that tax year, it is my responsibility to pay any difference.
+          </div>
+        </label>
+
+        <div x-show="donation.giftAid" x-collapse class="mt-4 pt-4 border-t border-ham-blue/15 grid grid-cols-2 gap-3">
+          <input type="text" placeholder="First Name (Required)" x-model="donation.firstName" class="col-span-1 px-3 py-2 rounded-lg border border-slate-300 text-xs" />
+          <input type="text" placeholder="Last Name (Required)" x-model="donation.lastName" class="col-span-1 px-3 py-2 rounded-lg border border-slate-300 text-xs" />
+          <input type="text" placeholder="House Name or Number" x-model="donation.house" class="col-span-1 px-3 py-2 rounded-lg border border-slate-300 text-xs" />
+          <input type="text" placeholder="UK Postcode (e.g. CB1 2AB)" x-model="donation.postcode" class="col-span-1 px-3 py-2 rounded-lg border border-slate-300 text-xs uppercase" />
+        </div>
+      </div>
+
+      <button
+        @click="submitDonation()"
+        class="w-full py-4 rounded-full bg-ham-gold hover:bg-ham-goldHover text-slate-900 font-bold text-base shadow-md transition"
+      >
+        <span x-text="t('proceedStripe') + ' £' + (donation.giftAid ? (donation.amount * 1.25).toFixed(2) + ' (with Gift Aid)' : donation.amount)"></span>
+      </button>
+
+      <p x-show="donationSuccess" class="mt-3 text-center text-xs font-semibold text-emerald-700 bg-emerald-50 py-2 rounded-lg">
+        ✓ Demo Stripe Checkout session prepared! In production this redirects to Stripe Checkout (Apple Pay / Google Pay).
+      </p>
+    </div>
+  </div>
+
+  <!-- TICKET CART DRAWER (Livewire TicketCart equivalent) -->
+  <div
+    x-show="cartOpen"
+    x-cloak
+    x-transition.opacity
+    class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex justify-end"
+  >
+    <div @click.away="cartOpen = false" class="bg-white w-full max-w-md h-full p-6 flex flex-col justify-between shadow-2xl">
+      <div>
+        <div class="flex items-center justify-between pb-4 border-b border-slate-200">
+          <h3 class="text-xl font-bold text-slate-900" x-text="t('cartTitle')">Your Event Registrations</h3>
+          <button @click="cartOpen = false" class="p-2 text-slate-400 hover:text-slate-700">✕</button>
+        </div>
+
+        <div class="py-6 space-y-4">
+          <template x-if="cart.length === 0">
+            <p class="text-slate-500 text-sm text-center py-12" x-text="t('cartEmpty')">Your event cart is currently empty. Select an event in Cambridge to register.</p>
+          </template>
+          <template x-for="(item, i) in cart" :key="i">
+            <div class="flex items-center justify-between bg-slate-50 p-4 rounded-xl border border-slate-200">
+              <div>
+                <div class="font-bold text-sm text-slate-900" x-text="item.title"></div>
+                <div class="text-xs text-slate-500" x-text="item.date + ' • Qty: ' + item.qty"></div>
+              </div>
+              <button @click="cart.splice(i, 1)" class="text-xs text-rose-600 font-semibold hover:underline">Remove</button>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <div x-show="cart.length > 0" class="pt-4 border-t border-slate-200">
+        <button
+          @click="alert('Registration confirmed! QR ticket queued via Laravel Job.'); cart = []; cartOpen = false"
+          class="w-full py-3.5 rounded-full bg-ham-blue hover:bg-ham-deep text-white font-bold text-sm transition"
+        >
+          Confirm Booking
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ALPINE.JS APPLICATION STATE & BILINGUAL CONTENT DICTIONARY -->
+  <script>
+    function hamApp() {
+      return {
+        lang: 'en',
+        menuOpen: false,
+        donateOpen: false,
+        cartOpen: false,
+        openAccordion: 0,
+        selectedPillar: 'all',
+        donationSuccess: false,
+        donation: {
+          frequency: 'one_off',
+          amount: 25,
+          giftAid: false,
+          firstName: '',
+          lastName: '',
+          house: '',
+          postcode: ''
+        },
+        cart: [],
+
+        toggleLang() {
+          this.lang = this.lang === 'en' ? 'uk' : 'en';
+        },
+
+        addToCart(ev) {
+          const existing = this.cart.find(i => i.id === ev.id);
+          if (existing) {
+            existing.qty += 1;
+          } else {
+            this.cart.push({ id: ev.id, title: ev.title, date: ev.date, price: ev.price, qty: 1 });
+          }
+          this.cartOpen = true;
+        },
+
+        cartTotalQty() {
+          return this.cart.reduce((sum, item) => sum + item.qty, 0);
+        },
+
+        submitDonation() {
+          this.donationSuccess = true;
+          setTimeout(() => { this.donationSuccess = false; }, 5000);
+        },
+
+        t(key) {
+          const dict = {
+            en: {
+              cambridgeSub: 'Heritage, Art & Music • Cambridge',
+              navMission: 'Our Mission',
+              navProjects: 'Projects',
+              navEvents: 'Events',
+              navNews: 'News',
+              navPolicies: 'Policies',
+              navContact: 'Contact',
+              donateBtn: 'Donate',
+              openMobileMenuPreview: '☰ Preview Reference Mobile Menu',
+              heroTagline: 'UKRAINIAN HAM CENTRE | CAMBRIDGE, UK',
+              heroH1: 'Helping Ukrainians Rebuild, Belong and Thrive in Cambridge',
+              heroSubtitle: 'A community-led charity supporting displaced Ukrainians while building lasting cultural bridges between Ukrainian and British traditions.',
+              bridgeLabel: 'Two Rich Traditions',
+              bridgeTitle: 'Connecting Communities',
+              bridgeLead: 'We believe that heritage connects generations, culture brings communities closer, and shared experiences create a stronger, more inclusive society in Cambridge.',
+              statPillars: 'Core Pillars',
+              statIntegration: 'UK–UA Bridge',
+              statCommunity: 'Community-Led',
+              missionEyebrow: 'Identity & Purpose',
+              missionHeading: 'Empowering Ukrainians, Enriching Cambridge',
+              missionSub: 'Structured, concise clarity on who we are, how we work, and the future we are building together.',
+              pillarsEyebrow: 'What We Do • 6 Core Pillars',
+              pillarsHeading: 'Six Interconnected Areas of Impact',
+              pillarsSub: 'Click any pillar below to view its full UK Charity governance purpose or filter upcoming Cambridge events.',
+              readFullPurpose: 'Full Legal Purpose',
+              filterEvents: 'Filter Events',
+              whoBenefitsEyebrow: 'Community Reach',
+              whoBenefitsHeading: 'Who Benefits From Our Work',
+              beliefLabel: 'Our Belief',
+              beliefQuote: '“Our purpose is to transform displacement into opportunity, individual talent into community strength, and cultural diversity into mutual understanding.”',
+              beliefSlogan: 'Every generation matters. Every talent has value. Every person deserves to belong and contribute.',
+              eventsEyebrow: 'Cambridge Programme',
+              eventsHeading: 'Upcoming Events & Gatherings',
+              filterAll: 'All Pillars',
+              freeEntry: 'Free Entry',
+              registerFreeBtn: 'Register Free',
+              addTicketBtn: 'Add Ticket',
+              newsEyebrow: 'Latest Updates',
+              newsHeading: 'News & Community Highlights',
+              policiesEyebrow: 'Governance & Transparency',
+              policiesHeading: 'Our Charitable Purposes & Policies',
+              policiesIntro: 'The Ukrainian Heritage, Art & Music Centre was established to support Ukrainians affected by war and displacement. Below is our formal governing statement across six interconnected charitable purposes.',
+              footerDesc: 'Ukrainian Heritage, Art & Music Centre — Cambridge, United Kingdom. Connecting communities through heritage, art, music, and mutual support.',
+              footerNav: 'Navigation',
+              footerSupport: 'Support Our Centre',
+              footerSupportText: 'Every contribution helps us run educational programmes for children, support older Ukrainians, and host cultural events in Cambridge.',
+              donateModalTitle: 'Support Ukrainian HAM',
+              oneOff: 'One-off',
+              monthly: 'Monthly',
+              proceedStripe: 'Donate',
+              cartTitle: 'Your Event Registrations',
+              cartEmpty: 'Your event cart is currently empty. Select an event in Cambridge to register.'
+            },
+            uk: {
+              cambridgeSub: 'Спадщина, Мистецтво та Музика • Кембридж',
+              navMission: 'Наша місія',
+              navProjects: 'Напрямки',
+              navEvents: 'Події',
+              navNews: 'Новини',
+              navPolicies: 'Статут і політики',
+              navContact: 'Контакти',
+              donateBtn: 'Підтримати',
+              openMobileMenuPreview: '☰ Відкрити мобільне меню',
+              heroTagline: 'УКРАЇНСЬКИЙ ЦЕНТР HAM | КЕМБРИДЖ, ВЕЛИКА БРИТАНІЯ',
+              heroH1: 'Допомагаємо українцям відновлюватися, інтегруватися та розвиватися',
+              heroSubtitle: 'Громадська благодійна ініціатива в Кембриджі, що підтримує українців та будує міцні культурні мости між Україною і Британією.',
+              bridgeLabel: 'Дві багаті традиції',
+              bridgeTitle: 'Об’єднуємо громади',
+              bridgeLead: 'Ми віримо, що спадщина єднає покоління, культура зближує громади, а спільний досвід творить сильніше й інклюзивніше суспільство в Кембриджі.',
+              statPillars: 'Напрямків',
+              statIntegration: 'Діалог культур',
+              statCommunity: 'Сила громади',
+              missionEyebrow: 'Хто ми та наша мета',
+              missionHeading: 'Підсилюємо українців, збагачуємо Кембридж',
+              missionSub: 'Чітка структура без зайвої води: хто ми, заради чого працюємо та яке суспільство будуємо.',
+              pillarsEyebrow: 'Що ми робимо • 6 напрямків',
+              pillarsHeading: 'Шість взаємопов’язаних сфер діяльності',
+              pillarsSub: 'Натисніть на будь-який напрямок, щоб переглянути повний офіційний опис у розділі Політик або відфільтрувати події.',
+              readFullPurpose: 'Офіційна мета',
+              filterEvents: 'Події напрямку',
+              whoBenefitsEyebrow: 'Для кого ми працюємо',
+              whoBenefitsHeading: 'Хто отримує користь від нашої діяльності',
+              beliefLabel: 'Наше переконання',
+              beliefQuote: '«Наша мета — перетворити вимушене переміщення на можливості, індивідуальні таланти — на силу громади, а культурне розмаїття — на взаєморозуміння».',
+              beliefSlogan: 'Кожне покоління важливе. Кожен талант має цінність. Кожна людина заслуговує на визнання та участь.',
+              eventsEyebrow: 'Афіша Кембриджа',
+              eventsHeading: 'Найближчі події та зустрічі',
+              filterAll: 'Усі напрямки',
+              freeEntry: 'Вхід вільний',
+              registerFreeBtn: 'Зареєструватися',
+              addTicketBtn: 'Додати квиток',
+              newsEyebrow: 'Останні оновлення',
+              newsHeading: 'Новини та звіти громади',
+              policiesEyebrow: 'Прозорість та управління',
+              policiesHeading: 'Наші благодійні цілі (Charitable Purposes)',
+              policiesIntro: 'Український центр спадщини, мистецтва та музики (Ukrainian HAM) створено для підтримки українців, які постраждали від війни. Нижче наведено офіційні статутні цілі за 6 напрямками.',
+              footerDesc: 'Ukrainian Heritage, Art & Music Centre — Кембридж, Велика Британія. Єднаємо громади через спадщину, мистецтво, музику та взаємопідтримку.',
+              footerNav: 'Навігація',
+              footerSupport: 'Підтримайте наш Центр',
+              footerSupportText: 'Кожен внесок допомагає проводити дитячі освітні програми, підтримувати старше покоління та організовувати культурні події у Кембриджі.',
+              donateModalTitle: 'Підтримати Ukrainian HAM',
+              oneOff: 'Разовий внесок',
+              monthly: 'Щомісячно',
+              proceedStripe: 'Підтримати на',
+              cartTitle: 'Ваші реєстрації на події',
+              cartEmpty: 'Кошик порожній. Оберіть подію в афіші Кембриджа для реєстрації.'
+            }
+          };
+          return dict[this.lang][key] || key;
+        },
+
+        missionCards() {
+          if (this.lang === 'uk') {
+            return [
+              {
+                title: 'Хто ми (Who We Are)',
+                body: 'Ukrainian HAM — це громадська благодійна ініціатива в Кембриджі, створена для підтримки українців, переміщених через війну. З 2022 року ми допомагаємо родинам перетворити виклики переїзду на простір для розвитку й інтеграції.'
+              },
+              {
+                title: 'Наша місія (Our Mission)',
+                body: 'Допомогти українцям реалізувати свій потенціал, поділитися талантами та зберегти культурну ідентичність як активним учасникам британського суспільства — через освіту, діалог та взаємну повагу.'
+              },
+              {
+                title: 'Наше бачення (Our Vision)',
+                body: 'Інклюзивне суспільство, де люди всіх поколінь живуть із гідністю, розвивають свої здібності та будують міцні мости між українською і британською громадами через культуру й творчість.'
+              }
+            ];
+          }
+          return [
+            {
+              title: 'Who We Are',
+              body: 'Ukrainian HAM is a grassroots Cambridge charity founded to support Ukrainians displaced by war. Since 2022, we have helped families turn displacement into opportunity through integration, personal growth, and community belonging.'
+            },
+            {
+              title: 'Our Mission',
+              body: 'To empower Ukrainians to realise their potential, share their talents, and preserve their cultural identity as active contributors to British society—fostering two-way integration through education, dialogue, and mutual respect.'
+            },
+            {
+              title: 'Our Vision',
+              body: 'An inclusive society where people of all generations and backgrounds live with dignity, develop their talents, and build lasting bridges between Ukrainian and British communities through culture, creativity, and mutual support.'
+            }
+          ];
+        },
+
+        pillars() {
+          const data = [
+            {
+              slug: 'integration',
+              shortName: this.lang === 'en' ? 'Integration' : 'Інтеграція',
+              title: this.lang === 'en' ? 'Community Support & Integration' : 'Підтримка громади та інтеграція',
+              teaser: this.lang === 'en'
+                ? 'Reducing isolation, improving wellbeing, and creating pathways for volunteering and active life in UK society.'
+                : 'Зменшення ізоляції, покращення добробуту та можливості для волонтерства й активної участі у житті Британії.',
+              fullPurpose: this.lang === 'en'
+                ? 'Supporting Ukrainian refugees, displaced families, and individuals facing hardship as they adapt to life in the UK. We work to reduce social isolation, improve wellbeing, encourage independence, and create opportunities for education, volunteering, skills development, and participation in British community life.'
+                : 'Підтримка українських біженців, переміщених родин та людей у складних обставинах під час адаптації до життя у Великій Британії. Ми працюємо над зменшенням соціальної ізоляції, зміцненням добробуту та залученням до громадського життя.'
+            },
+            {
+              slug: 'talent',
+              shortName: this.lang === 'en' ? 'Talent' : 'Таланти',
+              title: this.lang === 'en' ? 'Empowering Talent, Knowledge & Experience' : 'Розвиток талантів, знань та досвіду',
+              teaser: this.lang === 'en'
+                ? 'Helping Ukrainian professionals, educators, artists, and leaders share their expertise and flourish in Britain.'
+                : 'Підтримка українських фахівців, освітян, митців та лідерів у реалізації їхнього потенціалу у Великій Британії.',
+              fullPurpose: this.lang === 'en'
+                ? 'Recognising the professional qualifications, intellectual abilities, creativity, and practical experience that Ukrainians bring to British society. We encourage educators, professionals, artists, musicians, and emerging community leaders to develop their potential, share their knowledge, and enrich their local communities.'
+                : 'Визнання професійної кваліфікації, інтелектуального потенціалу, креативності та практичного досвіду українців у Британії. Ми допомагаємо фахівцям, освітянам і митцям розкривати свій потенціал.'
+            },
+            {
+              slug: 'older-people',
+              shortName: this.lang === 'en' ? 'Older Generation' : 'Старше покоління',
+              title: this.lang === 'en' ? 'Older People & Intergenerational Solidarity' : 'Старше покоління та зв’язок поколінь',
+              teaser: this.lang === 'en'
+                ? 'Valuing older people’s wisdom and skills through active ageing, volunteering, and mentoring younger generations.'
+                : 'Визнання досвіду старшого покоління, активне довголіття, волонтерство та передача знань молоді.',
+              fullPurpose: this.lang === 'en'
+                ? 'Supporting older Ukrainians to remain active, independent, socially connected, and valued. Recognising their professional knowledge and life experience as a vital resource, we create opportunities for active ageing, volunteering, teaching, and sharing wisdom with younger generations.'
+                : 'Підтримка українців старшого віку, щоб вони залишалися активними, незалежними та соціально залученими. Створення умов для активного довголіття та передачі досвіду молоді.'
+            },
+            {
+              slug: 'children',
+              shortName: this.lang === 'en' ? 'Children & Youth' : 'Діти та молодь',
+              title: this.lang === 'en' ? 'Children, Education & Future Generations' : 'Діти, освіта та майбутні покоління',
+              teaser: this.lang === 'en'
+                ? 'Nurturing youth through creative programmes and partnerships with educational institutions in the UK and Ukraine.'
+                : 'Підтримка дітей і молоді через освітні й творчі програми та співпрацю із закладами освіти України й Британії.',
+              fullPurpose: this.lang === 'en'
+                ? 'Contributing to the education, development, and wellbeing of children and young people through creative, educational, and cultural programmes. We cooperate with educational institutions in Ukraine and the UK to foster intergenerational learning, cultural awareness, and mutual understanding.'
+                : 'Сприяння освіті, розвитку та добробуту дітей і молоді через творчі, освітні й культурні програми у співпраці із закладами освіти України та Великої Британії.'
+            },
+            {
+              slug: 'heritage',
+              shortName: this.lang === 'en' ? 'Heritage & Music' : 'Культура і музика',
+              title: this.lang === 'en' ? 'Ukrainian Heritage, Arts & Music' : 'Українська спадщина, мистецтво та музика',
+              teaser: this.lang === 'en'
+                ? 'Sharing Ukrainian language, literature, history, art, and music through concerts, exhibitions, and public events.'
+                : 'Популяризація української мови, літератури, історії, мистецтва та музики через концерти, виставки й події.',
+              fullPurpose: this.lang === 'en'
+                ? 'Preserving and promoting Ukrainian language, literature, history, traditions, music, and contemporary art. Through literary and historical gatherings, language programmes, concerts, exhibitions, and festivals, we share Ukrainian heritage with multicultural audiences and challenge stereotypes through dialogue.'
+                : 'Збереження та популяризація української мови, літератури, історії, традицій, музики та сучасного мистецтва через концерти, виставки, лекторії та культурний обмін.'
+            },
+            {
+              slug: 'partnerships',
+              shortName: this.lang === 'en' ? 'Partnerships & Aid' : 'Партнерства і допомога',
+              title: this.lang === 'en' ? 'Community Partnerships & Humanitarian Support' : 'Партнерства громади та гуманітарна допомога',
+              teaser: this.lang === 'en'
+                ? 'Uniting Cambridge institutions and businesses for local cohesion while coordinating vital humanitarian aid to Ukraine.'
+                : 'Об’єднання інституцій та бізнесу Кембриджа задля згуртованості громади та координація гуманітарної допомоги Україні.',
+              fullPurpose: this.lang === 'en'
+                ? 'Building partnerships with local authorities, cultural institutions, charities, and businesses to enrich Cambridge’s civic life and promote family wellbeing. Where needed, we coordinate targeted humanitarian assistance for war-affected people in Ukraine—delivering food, clothing, hygiene, baby, and medical supplies through trusted partners.'
+                : 'Побудова партнерств із місцевими інституціями, благодійними фондами та бізнесом Кембриджа, а також координація адресної гуманітарної допомоги постраждалим від війни в Україні.'
+            }
+          ];
+          return data;
+        },
+
+        beneficiaries() {
+          if (this.lang === 'uk') {
+            return [
+              { group: 'Українські родини та переселенці', description: 'Біженці та сім’ї, які будують нове самостійне життя у Кембриджі та Великій Британії.' },
+              { group: 'Діти, молодь і старше покоління', description: 'Молоді учні та люди старшого віку, об’єднані навчанням і взаємопідтримкою.' },
+              { group: 'Люди в соціальній ізоляції', description: 'Ті, хто долає мовні, емоційні чи адаптаційні бар’єри в новій країні.' },
+              { group: 'Митці, освітяни та волонтери', description: 'Фахівці та громадські лідери, які діляться своїми знаннями й талантами.' },
+              { group: 'Британські родини та громада', description: 'Місцеві жителі, спонсори та мультикультурна спільнота Кембриджа.' }
+            ];
+          }
+          return [
+            { group: 'Displaced Ukrainians & Families', description: 'Refugees and families rebuilding independent lives in Cambridge and the UK.' },
+            { group: 'Children, Youth & Older People', description: 'Young learners and older generations connecting through shared knowledge.' },
+            { group: 'Isolated Community Members', description: 'Individuals overcoming language, social, or wellbeing barriers to integration.' },
+            { group: 'Artists, Educators & Volunteers', description: 'Professionals and emerging leaders sharing their talents with British society.' },
+            { group: 'British Hosts & Local Community', description: 'Host families, local partners, and neighbours engaging in cultural exchange.' }
+          ];
+        },
+
+        filteredEvents() {
+          const all = [
+            {
+              id: 1,
+              pillar: 'heritage',
+              pillarLabel: this.lang === 'en' ? 'Heritage, Arts & Music' : 'Культура і музика',
+              date: '21 Nov 2026 • 18:30',
+              price: 15,
+              location: 'West Road Concert Hall, Cambridge',
+              title: this.lang === 'en' ? 'Ukrainian Classical & Folk Music Evening' : 'Вечір української класичної та народної музики',
+              summary: this.lang === 'en'
+                ? 'Bringing together Ukrainian and British musicians to celebrate shared musical traditions and contemporary composers.'
+                : 'Спільний концерт українських та британських музикантів, присвячений класичній і сучасній спадщині.'
+            },
+            {
+              id: 2,
+              pillar: 'older-people',
+              pillarLabel: this.lang === 'en' ? 'Intergenerational Support' : 'Зв’язок поколінь',
+              date: '28 Nov 2026 • 11:00',
+              price: 0,
+              location: 'Cambridge Community Centre',
+              title: this.lang === 'en' ? 'Intergenerational Wisdom & Craft Workshop' : 'Майстерня поколінь: ремесла, досвід та спілкування',
+              summary: this.lang === 'en'
+                ? 'Older Ukrainian professionals and artisans share traditional crafts, stories, and practical skills with youth and local families.'
+                : 'Представники старшого покоління діляться досвідом, традиційними ремеслами та історіями з молоддю і родинами Кембриджа.'
+            },
+            {
+              id: 3,
+              pillar: 'children',
+              pillarLabel: this.lang === 'en' ? 'Children & Education' : 'Діти та освіта',
+              date: '05 Dec 2026 • 10:30',
+              price: 0,
+              location: 'Central Library, Cambridge',
+              title: this.lang === 'en' ? 'Bilingual Literature & Creative Art Club for Children' : 'Двомовний літературно-мистецький клуб для дітей',
+              summary: this.lang === 'en'
+                ? 'Interactive Ukrainian language storytelling, illustration workshop, and educational bridge session with partner schools.'
+                : 'Інтерактивні читання українською та англійською мовами, творча майстерня та спілкування з однолітками.'
+            }
+          ];
+          if (this.selectedPillar === 'all') return all;
+          return all.filter(e => e.pillar === this.selectedPillar);
+        },
+
+        posts() {
+          if (this.lang === 'uk') {
+            return [
+              {
+                category: 'Інформація',
+                date: '08/11/2026',
+                title: 'Будуємо майбутнє з гідністю: інтеграція та довгострокова підтримка українців у Кембриджі',
+                excerpt: 'Ukrainian HAM об’єднує освітян, митців, представників старшого покоління та партнерські організації Кембриджа задля створення сталих програм розвитку та культурного обміну.'
+              },
+              {
+                category: 'Культурний міст',
+                date: '01/11/2026',
+                title: 'Осінній лекторій української літератури та історії для британської громади',
+                excerpt: 'Понад 120 жителів Кембриджа відвідали відкриту зустріч, присвячену українській літературній традиції, сучасним викликам та спільним європейським цінностям.'
+              }
+            ];
+          }
+          return [
+            {
+              category: 'Information',
+              date: '08/11/2026',
+              title: 'Building Futures with Dignity: Community Integration & Cultural Dialogue in Cambridge',
+              excerpt: 'Ukrainian HAM brings together educators, artists, older generations, and local Cambridge partners to turn displacement into lasting opportunity and mutual enrichment.'
+            },
+            {
+              category: 'Cultural Bridge',
+              date: '01/11/2026',
+              title: 'Autumn Ukrainian Literature, History & Music Showcase Welcomes Local Hosts',
+              excerpt: 'Over 120 Cambridge residents and host families joined our open cultural gathering exploring Ukraine’s historical legacy, contemporary art, and shared values.'
+            }
+          ];
+        }
+      };
+    }
+  </script>
+</body>
+</html>
